@@ -462,6 +462,7 @@ extern "C" {
      * - Square barcode marker: "single_barcode;barcode_id;pattern_width", e.g. "single_barcode;0;80"
      * - Multi-square marker: "multi;config_file", e.g. "multi;data/multi/marker.dat"
      * - NFT marker: "nft;nft_dataset_pathname", e.g. "nft;gibraltar"
+     * - 2D trackable: "2d;2d_jpg_pathname;height", e.g. "2d;pinball.jpg;1.0"
 	 * @param cfg		The configuration string
 	 * @return			The unique identifier (UID) of the trackable instantiated based on the configuration string, or -1 if an error occurred
 	 */
