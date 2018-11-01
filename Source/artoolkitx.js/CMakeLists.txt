@@ -22,7 +22,8 @@ set(EXPORT_FUNCTIONS "'_arwUpdateAR', '_arwCapture', '_arwGetProjectionMatrix', 
 set(EXPORTED_RUNTIME_FUNCTIONS "'ccall', 'cwrap', 'FS', 'setValue'")
 set(MODULE_OPTIONS "-s MODULARIZE_INSTANCE=1 -s EXPORT_NAME='artoolkitXjs' -s EXPORT_ES6=1" )
 
-math(EXPR MEM 512*1024*1024)
+#math(EXPR MEM 512*1024*1024)
+set(MEM 16777216)
 message("CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 set(MEMORY "-s TOTAL_MEMORY=${MEM} -s ALLOW_MEMORY_GROWTH=1 -s DISABLE_EXCEPTION_CATCHING=0")
 
