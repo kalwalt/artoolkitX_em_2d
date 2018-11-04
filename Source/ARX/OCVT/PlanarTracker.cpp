@@ -48,6 +48,7 @@
 #include "OCVUtils.h"
 #include <opencv2/video.hpp>
 #include <opencv2/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 #include <iostream>
 
 class PlanarTracker::PlanarTrackerImpl
@@ -408,9 +409,21 @@ public:
     
     void ProcessFrameData(unsigned char * frame)
     {
-        cv::Mat newFrame(_frameSizeY, _frameSizeX, CV_8UC1, frame);
-        ProcessFrame(newFrame);
-        newFrame.release();
+        std::cout << "ProcessFrameData" << std::endl;
+        // When using emscripten the image comes in as RGB image from the browser
+        // Convert it to Gray
+        #if ARX_TARGET_PLATFORM_EMSCRIPTEN
+          cv::Mat colorFrame(_frameSizeY, _frameSizeX, CV_8UC4, frame);
+          cv::Mat grayFrame(_frameSizeY, _frameSizeX, CV_8UC1);
+          cv::cvtColor(colorFrame, grayFrame, cv::COLOR_RGBA2GRAY);
+          ProcessFrame(grayFrame);
+          grayFrame.release();
+        #else 
+          cv::Mat newFrame(_frameSizeY, _frameSizeX, CV_8UC1, frame);
+          ProcessFrame(newFrame);
+          newFrame.release();
+        #endif
+
     }
     
     void ProcessFrame(cv::Mat frame)
@@ -556,16 +569,30 @@ public:
     
     void AddMarker(unsigned char* buff, std::string fileName, int width, int height, int uid, float scale)
     {
+        std::cout << "Add Marker" << std::endl;
         TrackableInfo newTrackable;
-        newTrackable._image = cv::Mat(height, width, CV_8UC1, buff);
+        #if ARX_TARGET_PLATFORM_EMSCRIPTEN
+          std::cout << "Add Marker EM" << std::endl;
+          cv::Mat colorImage(height, width, CV_8UC4, buff);
+          cv::Mat grayImage(_frameSizeY, _frameSizeX, CV_8UC1);
+          cv::cvtColor(colorImage, grayImage, cv::COLOR_RGBA2GRAY);
+          newTrackable._image = grayImage;
+        #else 
+          newTrackable._image = cv::Mat(height, width, CV_8UC1, buff);
+        #endif
+        std::cout << "Add Marker _image" << std::endl;
         if(!newTrackable._image.empty()) {
             newTrackable._id = uid;
             newTrackable._fileName = fileName;
             newTrackable._scale = scale;
             newTrackable._width = newTrackable._image.cols;
             newTrackable._height = newTrackable._image.rows;
+            std::cout << "Add Marker DetectFeatures" << std::endl;
+            // After this it crashes
             newTrackable._featurePoints = _featureDetector.DetectFeatures(newTrackable._image, cv::Mat());
+            std::cout << "Add Marker CalcDescriptors" << std::endl;
             newTrackable._descriptors = _featureDetector.CalcDescriptors(newTrackable._image, newTrackable._featurePoints);
+            std::cout << "Add Marker FindCorners" << std::endl;
             newTrackable._cornerPoints = _harrisDetector.FindCorners(newTrackable._image);
             newTrackable._bBox.push_back(cv::Point2f(0,0));
             newTrackable._bBox.push_back(cv::Point2f(newTrackable._width, 0));
