@@ -409,7 +409,6 @@ public:
     
     void ProcessFrameData(unsigned char * frame)
     {
-        std::cout << "ProcessFrameData" << std::endl;
         // When using emscripten the image comes in as RGB image from the browser
         // Convert it to Gray
         #if ARX_TARGET_PLATFORM_EMSCRIPTEN

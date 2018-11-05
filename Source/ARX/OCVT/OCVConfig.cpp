@@ -46,7 +46,7 @@ int maxNumberOfToTrack = 1;
 int searchRadius = 15;
 int match_method = cv::TM_SQDIFF_NORMED;
 int featureDetectPyramidLevel = 2;
-int defaultDetectorType = 3;
+int defaultDetectorType = 4;  // iOS Safari can't work with detectorType=1
 const double nn_match_ratio = 0.8f; // Nearest-neighbour matching ratio
 const double ransac_thresh = 2.5f; // RANSAC inlier threshold
 cv::RNG rng( 0xFFFFFFFF );
