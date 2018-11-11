@@ -33,7 +33,7 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     # set(NO_WASM "-s WASM=0")
     set(WASM_LOADER "--pre-js ${PROJECT_SOURCE_DIR}/artoolkitx.js/ARX_wasmLoader.js")
 else()
-    set(OPTIMIZE_EMCC "-Oz")
+    set(OPTIMIZE_EMCC "-Oz -s PRECISE_I64_MATH=0")
     # set(NO_WASM "-s WASM=0")
     # If WASM add a pre-js to register the wasm loader
     set(WASM_LOADER "--pre-js ${PROJECT_SOURCE_DIR}/artoolkitx.js/ARX_wasmLoader.js")

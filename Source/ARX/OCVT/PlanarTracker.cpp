@@ -466,7 +466,7 @@ public:
                 
                 std::vector<cv::Point2f> imgPoints = _trackables[i]._trackSelection.GetSelectedFeaturesWarped();
                 std::vector<cv::Point3f> objPoints = _trackables[i]._trackSelection.GetSelectedFeatures3d();
-                
+
                 CameraPoseFromPoints(_trackables[i]._pose, objPoints, imgPoints);
             }
         }
@@ -640,8 +640,8 @@ public:
                 cv::Mat pose = _trackables[i]._pose;
                 cv::Mat poseOut;
                 pose.convertTo(poseOut, CV_32FC1);
-                //std::cout << "poseOut" << std::endl;
-                //std::cout << poseOut << std::endl;
+                // std::cout << "poseOut" << std::endl;
+                // std::cout << poseOut << std::endl;
                 return poseOut.ptr<float>(0);
             }
         }
@@ -665,8 +665,13 @@ public:
         cv::Mat rvec = cv::Mat::zeros(3, 1, CV_64FC1);          // output rotation vector
         cv::Mat tvec = cv::Mat::zeros(3, 1, CV_64FC1);          // output translation vector
         
-        cv::solvePnPRansac(objPts, imgPts, _K, cv::Mat(), rvec, tvec);
-        
+        cv::solvePnP(objPts, imgPts, _K, cv::Mat(), rvec, tvec);
+                std::cout << "rvec" << std::endl;
+
+        std::cout << rvec << std::endl;
+                std::cout << "tvec" << std::endl;
+        std::cout << tvec << std::endl;
+
         cv::Mat rMat;
         Rodrigues(rvec,rMat);
         cv::hconcat(rMat,tvec, pose);
