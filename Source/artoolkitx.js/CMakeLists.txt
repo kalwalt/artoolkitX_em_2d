@@ -13,7 +13,7 @@ message("CMAKE_CURRENT_BINARY_DIR: ${CMAKE_CURRENT_BINARY_DIR}")
 
 add_definitions("-std=c++11")
 
-link_directories(${CMAKE_CURRENT_BINARY_DIR}/../ARX ${CMAKE_CURRENT_BINARY_DIR}/../ARX/AR ${CMAKE_CURRENT_BINARY_DIR}/../ARX/ARUtil ${CMAKE_CURRENT_BINARY_DIR}/../ARX/AR2 ${CMAKE_CURRENT_BINARY_DIR}/../ARX/KPM ${CMAKE_CURRENT_BINARY_DIR}/../ARX/ARVideo ${CMAKE_CURRENT_BINARY_DIR}/../ARX/ARG ${CMAKE_CURRENT_BINARY_DIR}/../ARX/OCVT ${CMAKE_CURRENT_BINARY_DIR}/../../depends/emscripten/opencv-3.4.1/build_Ninja/lib ${CMAKE_CURRENT_BINARY_DIR}/../../depends/emscripten/opencv-3.4.1/build_Ninja/3rdparty/lib)
+link_directories(${CMAKE_CURRENT_BINARY_DIR}/../ARX ${CMAKE_CURRENT_BINARY_DIR}/../ARX/AR ${CMAKE_CURRENT_BINARY_DIR}/../ARX/ARUtil ${CMAKE_CURRENT_BINARY_DIR}/../ARX/AR2 ${CMAKE_CURRENT_BINARY_DIR}/../ARX/KPM ${CMAKE_CURRENT_BINARY_DIR}/../ARX/ARVideo ${CMAKE_CURRENT_BINARY_DIR}/../ARX/ARG ${CMAKE_CURRENT_BINARY_DIR}/../ARX/OCVT ${CMAKE_CURRENT_BINARY_DIR}/../../depends/emscripten/opencv-3.4.1/build_Ninja_opt/lib ${CMAKE_CURRENT_BINARY_DIR}/../../depends/emscripten/opencv-3.4.1/build_Ninja_opt/3rdparty/lib)
 link_libraries(libARX libARVideo libAR libARG libARUtil libOCVT libopencv_highgui libopencv_imgcodecs libopencv_videoio libopencv_calib3d libopencv_features2d libopencv_flann libopencv_imgproc libopencv_video libopencv_core libpng libjpeg libjasper libtiff libwebp libprotobuf IlmImf zlib)
 
 add_executable(artoolkitx  ${PROJECT_SOURCE_DIR}/artoolkitx.js/ARX_js.cpp ${PROJECT_SOURCE_DIR}/artoolkitx.js/ARX_bindings.cpp)
@@ -33,7 +33,7 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     # set(NO_WASM "-s WASM=0")
     set(WASM_LOADER "--pre-js ${PROJECT_SOURCE_DIR}/artoolkitx.js/ARX_wasmLoader.js")
 else()
-    set(OPTIMIZE_EMCC "-Oz -s PRECISE_I64_MATH=0")
+    set(OPTIMIZE_EMCC "-Oz -s PRECISE_I64_MATH=0 --llvm-lto 1 -s PRECISE_F32=2")
     # set(NO_WASM "-s WASM=0")
     # If WASM add a pre-js to register the wasm loader
     set(WASM_LOADER "--pre-js ${PROJECT_SOURCE_DIR}/artoolkitx.js/ARX_wasmLoader.js")
