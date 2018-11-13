@@ -666,12 +666,6 @@ public:
         cv::Mat tvec = cv::Mat::zeros(3, 1, CV_64FC1);          // output translation vector
         
         cv::solvePnP(objPts, imgPts, _K, cv::Mat(), rvec, tvec);
-                std::cout << "rvec" << std::endl;
-
-        std::cout << rvec << std::endl;
-                std::cout << "tvec" << std::endl;
-        std::cout << tvec << std::endl;
-
         cv::Mat rMat;
         Rodrigues(rvec,rMat);
         cv::hconcat(rMat,tvec, pose);
