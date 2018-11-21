@@ -262,17 +262,37 @@ fi
 
 # Build emscripten
 if [ $BUILD_EM ]; then
-    echo "Building emscripten"
+#-s DOUBLE_MODE = 1
+#Together with the above, and on a few more Emscripten recommendations, I added these compilation flags to reduce the asm size by just over 5%:
+
+    EM_FLAGS="-Oz --llvm-lto 1 --bind -s ASSERTIONS=0 --memory-init-file 0 -s INVOKE_RUN=0"
+    EM_TOOLCHAIN="$EMSCRIPTEN/cmake/Modules/Platform/Emscripten.cmake"
+    OPENCV_INTRINSICS="-DCV_ENABLE_INTRINSICS=0 -DCPU_BASELINE="" -DCPU_DISPATCH="""
+    OPENCV_MODULES_EXCLUDE="-DBUILD_opencv_dnn=0 -DBUILD_opencv_ml=0 -DBUILD_opencv_objdetect=0 -DBUILD_opencv_photo=0 -DBUILD_opencv_shape=0 -DBUILD_opencv_shape=0 -DBUILD_opencv_stitching=0 -DBUILD_opencv_superres=0 -DBUILD_opencv_videostab=0"
+    OPENCV_CONF="${OPENCV_MODULES_EXCLUDE} -DBUILD_opencv_apps=0 -DBUILD_JPEG=1 -DBUILD_PNG=1 -DBUILD_DOCS=0 -DBUILD_EXAMPLES=0 -DBUILD_IPP_IW=0 -DBUILD_PACKAGE=0 -DBUILD_PERF_TESTS=0 -DBUILD_TESTS=0 -DBUILD_WITH_DEBUG_INFO=0 -DWITH_PTHREADS_PF=0 -DWITH_PNG=1 -DWITH_WEBP=1 -DWITH_JPEG=1 -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$EM_TOOLCHAIN -DBUILD_SHARED_LIBS=0 -DBUILD_ITT=0 -DWITH_IPP=0"
+    echo "Building artoolkit for the web with Emscripten"
+    echo "Building dependencies"
+    cd $OURDIR
+    cd depends/emscripten/
+    if [ ! -d "opencv-em" ] ; then
+      mkdir opencv-em
+    fi
+    cd opencv-em
+    cmake ../opencv-3.4.1 -GNinja $OPENCV_CONF $OPENCV_INTRINSICS -DCMAKE_CXX_FLAGS="$EM_FLAGS"
+    ninja
+    cd $OURDIR
+    echo "Building artoolkit"
     if [ ! -d "build-em" ] ; then
         mkdir build-em
     fi
     cd build-em
     rm -f CMakeCache.txt
-    emconfigure cmake .. -DCMAKE_BUILD_TYPE=${DEBUG+Debug}${DEBUG-Release}
+    emconfigure cmake .. -DCMAKE_BUILD_TYPE=${DEBUG+Debug}${DEBUG-Release} -DCMAKE_CXX_FLAGS="$EM_FLAGS" -DCMAKE_C_FLAGS="$EM_FLAGS"
+
     if [ "${DEBUG+Debug}${DEBUG-Release}" = "Debug" ]; then
         emmake make VERBOSE=1
     else
-        emmake make
+        emmake make VERBOSE=1
     fi
     cd artoolkitx.js; make install
     #FIXME: the final artoolkitx.js creation complains about unresolved symbols from libJPEG that might become an issue further down the line
