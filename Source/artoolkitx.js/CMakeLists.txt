@@ -35,7 +35,7 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     set(DEBUG_EMCC "-g4 -s SAFE_HEAP=1 -s ASSERTIONS=1 --js-opts 0 -s DEMANGLE_SUPPORT=0" )
     # set(NO_WASM "-s WASM=0")
 else()
-    set(OPTIMIZE_EMCC "-Oz -s PRECISE_I64_MATH=0 --llvm-lto 1 -s PRECISE_F32=2")
+    set(OPTIMIZE_EMCC "-Oz --memory-init-file 0 -s INVOKE_RUN=0 --llvm-lto 1 -s ASSERTIONS=0 -s PRECISE_I64_MATH=0 -s PRECISE_F32=2")
     # set(NO_WASM "-s WASM=0")
     # If WASM add a pre-js to register the wasm loader
 endif()
