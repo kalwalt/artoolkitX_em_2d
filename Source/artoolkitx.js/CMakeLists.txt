@@ -25,7 +25,7 @@ set(MODULE_OPTIONS "-s MODULARIZE_INSTANCE=1 -s EXPORT_NAME='artoolkitXjs' -s EX
 #math(EXPR MEM 512*1024*1024)
 set(MEM 16777216) #This is default value
 message("CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
-set(MEMORY "-s TOTAL_MEMORY=${MEM} -s ALLOW_MEMORY_GROWTH=1 -s DISABLE_EXCEPTION_CATCHING=0")
+set(MEMORY "-s TOTAL_MEMORY=${MEM} -s ALLOW_MEMORY_GROWTH=1")
 
 set(WASM_LOADER "--pre-js ${PROJECT_SOURCE_DIR}/artoolkitx.js/ARX_wasmLoader.js")
 #To generate source maps the -g4 needs to be passed to the LINK_FLAGS
@@ -35,13 +35,12 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     set(DEBUG_EMCC "-g4 -s SAFE_HEAP=1 -s ASSERTIONS=1 --js-opts 0 -s DEMANGLE_SUPPORT=0" )
     # set(NO_WASM "-s WASM=0")
 else()
-    set(OPTIMIZE_EMCC "-Oz --memory-init-file 0 -s INVOKE_RUN=0 --llvm-lto 1 -s ASSERTIONS=0 -s PRECISE_I64_MATH=0 -s PRECISE_F32=2")
+    # set(OPTIMIZE_EMCC "--memory-init-file 0 -s INVOKE_RUN=0 --llvm-lto 1 -s ASSERTIONS=0 -s PRECISE_I64_MATH=0 -s PRECISE_F32=2")
     # set(NO_WASM "-s WASM=0")
     # If WASM add a pre-js to register the wasm loader
 endif()
 
-#-s NO_EXIT_RUNTIME=1 // makes it smaller by 7%
-set(OPTIMIZE_OPTIONS "-s NO_EXIT_RUNTIME=1 -s INVOKE_RUN=0")
+# set(OPTIMIZE_OPTIONS "-s NO_EXIT_RUNTIME=1 -s INVOKE_RUN=0")
 set_target_properties(artoolkitx PROPERTIES LINK_FLAGS "${OPTIMIZE_OPTIONS} ${MODULE_OPTIONS} ${NO_WASM} ${WASM_LOADER} ${MEMORY} ${DEBUG_EMCC} ${OPTIMIZE_EMCC} --bind --post-js ${PROJECT_SOURCE_DIR}/artoolkitx.js/ARX_additions.js -s EXPORTED_FUNCTIONS='[${EXPORT_FUNCTIONS}]' -s EXTRA_EXPORTED_RUNTIME_METHODS='[${EXPORTED_RUNTIME_FUNCTIONS}]'")
 
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
