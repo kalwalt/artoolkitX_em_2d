@@ -262,9 +262,7 @@ fi
 
 # Build emscripten
 if [ $BUILD_EM ]; then
-#-s DOUBLE_MODE = 1
-#Together with the above, and on a few more Emscripten recommendations, I added these compilation flags to reduce the asm size by just over 5%:
-    EM_FLAGS="-O3 --llvm-lto 1 -s ASSERTIONS=0 --memory-init-file 0 -s INVOKE_RUN=0 -s NO_EXIT_RUNTIME=1"
+    EM_FLAGS="-O2 --llvm-lto 1 -s ASSERTIONS=0 --memory-init-file 0 -s INVOKE_RUN=0 -s NO_EXIT_RUNTIME=1"
     EM_TOOLCHAIN="$EMSCRIPTEN/cmake/Modules/Platform/Emscripten.cmake"
     OPENCV_INTRINSICS="-DCV_ENABLE_INTRINSICS=0 -DCPU_BASELINE="" -DCPU_DISPATCH="""
     OPENCV_MODULES_EXCLUDE="-DBUILD_opencv_dnn=0 -DBUILD_opencv_ml=0 -DBUILD_opencv_objdetect=0 -DBUILD_opencv_photo=0 -DBUILD_opencv_shape=0 -DBUILD_opencv_shape=0 -DBUILD_opencv_stitching=0 -DBUILD_opencv_superres=0 -DBUILD_opencv_videostab=0"
