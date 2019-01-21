@@ -276,10 +276,10 @@ if [ $BUILD_EM ]; then
     EM_ARTK_FLAGS="-msse -msse2 -msse3 -mssse3 -I$OURDIR/depends/emscripten/opencv-3.4.1 -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/core/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/highgui/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/imgcodecs/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/videoio/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/imgproc/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/calib3d/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/features2d/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/flann/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/video/include -I$OURDIR/ARX/OCVT/include"
     cd $OURDIR
     cd depends/emscripten/
-    if [ ! -d "opencv-em" ] ; then
-      mkdir opencv-em
+    if [ ! -d "build_opencv-em" ] ; then
+      mkdir build_opencv-em
     fi
-    cd opencv-em
+    cd build_opencv-em
     cmake ../opencv-3.4.1 -GNinja -DCMAKE_TOOLCHAIN_FILE=$EM_TOOLCHAIN $OPENCV_CONF $OPENCV_INTRINSICS -DCMAKE_CXX_FLAGS="$EM_FLAGS" -DCMAKE_C_FLAGS="$EM_FLAGS"
     # -DBUILD_PERF_TESTS:BOOL="0" -DWITH_IPP:BOOL="0" -DBUILD_SHARED_LIBS:BOOL="0" -DBUILD_IPP_IW:BOOL="0" -DBUILD_ITT:BOOL="0" -DBUILD_opencv_apps:BOOL="0" -DCMAKE_CXX_FLAGS:STRING="-O3 --llvm-lto 1 --bind -s ASSERTIONS=0 --memory-init-file 0 -s INVOKE_RUN=0 -s SIMD=1 -s WASM=0" -DCV_ENABLE_INTRINSICS:BOOL="1" -DWITH_ITT:BOOL="0" -DBUILD_TESTS:BOOL="0" 
     ninja

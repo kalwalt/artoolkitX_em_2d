@@ -66,3 +66,5 @@ xcuserdata/
 #### Other VCS
 .svn/
 *.dmg
+Source/depends/emscripten/opencv-em
+Source/depends/emscripten/build_opencv-em

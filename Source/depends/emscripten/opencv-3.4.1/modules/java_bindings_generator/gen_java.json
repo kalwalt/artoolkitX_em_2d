@@ -1,0 +1,22 @@
+{
+  "rootdir": "/Users/thorstenbux/repos/artoolkitX/artoolkitX.js/Source/Extras/artoolkitx/Source/depends/emscripten/opencv-3.4.1",
+  "modules": [
+    { "name": "core", "location": "modules/core" },
+    { "name": "imgproc", "location": "modules/imgproc" },
+    { "name": "ml", "location": "modules/ml" },
+    { "name": "objdetect", "location": "modules/objdetect" },
+    { "name": "photo", "location": "modules/photo" },
+    { "name": "video", "location": "modules/video" },
+    { "name": "dnn", "location": "modules/dnn" },
+    { "name": "imgcodecs", "location": "modules/imgcodecs" },
+    { "name": "videoio", "location": "modules/videoio" },
+    { "name": "highgui", "location": "modules/highgui" },
+    { "name": "features2d", "location": "modules/features2d" },
+    { "name": "calib3d", "location": "modules/calib3d" }
+  ],
+  "files_remap": [
+    { "src": "modules/java/generator/android/java/org/opencv/android/OpenCVLoader.java.in", "target": "/Users/thorstenbux/repos/artoolkitX/artoolkitX.js/Source/Extras/artoolkitx/Source/depends/emscripten/opencv-3.4.1/configured/modules/java/generator/android/java/org/opencv/android/OpenCVLoader.java" },
+    { "src": "modules/java/generator/src/java/org/opencv/osgi/OpenCVNativeLoader.java.in", "target": "/Users/thorstenbux/repos/artoolkitX/artoolkitX.js/Source/Extras/artoolkitx/Source/depends/emscripten/opencv-3.4.1/configured/modules/java/generator/src/java/org/opencv/osgi/OpenCVNativeLoader.java" },
+    { "src": "modules/core/misc/java/src/java/core+Core.jcode.in", "target": "/Users/thorstenbux/repos/artoolkitX/artoolkitX.js/Source/Extras/artoolkitx/Source/depends/emscripten/opencv-3.4.1/configured/modules/core/misc/java/src/java/core+Core.jcode" }
+  ]
+}
