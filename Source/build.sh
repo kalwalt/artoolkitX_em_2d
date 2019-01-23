@@ -264,8 +264,6 @@ fi
 if [ $BUILD_EM ]; then
 #-s DOUBLE_MODE = 1
 #Together with the above, and on a few more Emscripten recommendations, I added these compilation flags to reduce the asm size by just over 5%:
-
-#-s NO_EXIT_RUNTIME=1 // makes it smaller by 7%
     EM_FLAGS="-O3 --llvm-lto 1 -s ASSERTIONS=0 --memory-init-file 0 -s INVOKE_RUN=0 -s NO_EXIT_RUNTIME=1"
     EM_TOOLCHAIN="$EMSCRIPTEN/cmake/Modules/Platform/Emscripten.cmake"
     OPENCV_INTRINSICS="-DCV_ENABLE_INTRINSICS=0 -DCPU_BASELINE="" -DCPU_DISPATCH="""
@@ -290,6 +288,7 @@ if [ $BUILD_EM ]; then
     fi
     cd build-em
     rm -f CMakeCache.txt
+    rm -rf ./artoolkitx.js
     emconfigure cmake .. -DCMAKE_BUILD_TYPE=${DEBUG+Debug}${DEBUG-Release} -DCMAKE_CXX_FLAGS="$EM_FLAGS $EM_ARTK_FLAGS" -DCMAKE_C_FLAGS="$EM_FLAGS $EM_ARTK_FLAGS"
 
     if [ "${DEBUG+Debug}${DEBUG-Release}" = "Debug" ]; then
