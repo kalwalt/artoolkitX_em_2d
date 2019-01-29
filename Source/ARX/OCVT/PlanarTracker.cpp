@@ -430,6 +430,11 @@ public:
         //std::cout << "Building pyramid" << std::endl;
         BuildImagePyramid(frame);
         // std::cout << "Drawing detected markers to mask" << std::endl;
+        // if (OCVFeatureDetector::count != 1) {
+        //   OCVFeatureDetector::count = 1;
+        //   return;
+        // }
+        // OCVFeatureDetector::count = 2;
         if(CanDetectNewFeatures()) {
             cv::Mat detectionFrame;
             cv::pyrDown(frame, detectionFrame, cv::Size(frame.cols/featureDetectPyramidLevel, frame.rows/featureDetectPyramidLevel));

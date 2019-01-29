@@ -56,6 +56,8 @@ public:
     std::vector< std::vector<cv::DMatch> >  MatchFeatures(cv::Mat first_desc, cv::Mat desc);
     
     void SetFeatureDetector(int detectorType);
+
+    // static int count;
     
 private:
     void CreateAkazeFeatureDetector();

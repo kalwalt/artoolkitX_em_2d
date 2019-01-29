@@ -40,6 +40,8 @@
 
 #include "OCVFeatureDetector.h"
 
+// int OCVFeatureDetector::count = 1;
+
 OCVFeatureDetector::OCVFeatureDetector()
 {
 }
