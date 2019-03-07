@@ -676,6 +676,7 @@ public:
         #else
           cv::solvePnPRansac(objPts, imgPts, _K, cv::Mat(), rvec, tvec);
         #endif
+        
         cv::Mat rMat;
         Rodrigues(rvec,rMat);
         cv::hconcat(rMat,tvec, pose);
