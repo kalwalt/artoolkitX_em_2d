@@ -262,7 +262,9 @@ fi
 
 # Build emscripten
 if [ $BUILD_EM ]; then
-    EM_FLAGS="-O2 --llvm-lto 1 -s ASSERTIONS=0 --memory-init-file 0 -s INVOKE_RUN=0 -s NO_EXIT_RUNTIME=1"
+    ##!!! Use -s DISABLE_EXCEPTION_CATCHING=0 if building with detection type 1 or utilizing OpenCL functions!!!
+    ## test:  -s AGGRESSIVE_VARIABLE_ELIMINATION=1
+    EM_FLAGS="-O3 -s ASSERTIONS=0 --llvm-lto 1 --memory-init-file 0 -s INVOKE_RUN=0 -s NO_EXIT_RUNTIME=1"
     # EM_FLAGS="--llvm-lto 1 -s ASSERTIONS=1 -g4 -s SAFE_HEAP=1 --memory-init-file 0 -s INVOKE_RUN=0 -s NO_EXIT_RUNTIME=1"
     EM_TOOLCHAIN="$EMSCRIPTEN/cmake/Modules/Platform/Emscripten.cmake"
     OPENCV_INTRINSICS="-DCV_ENABLE_INTRINSICS=0 -DCPU_BASELINE="" -DCPU_DISPATCH="""
@@ -277,9 +279,9 @@ if [ $BUILD_EM ]; then
       mkdir build_opencv-em
     fi
     cd build_opencv-em
-    cmake ../opencv-3.4.1 -GNinja -DCMAKE_TOOLCHAIN_FILE=$EM_TOOLCHAIN $OPENCV_CONF $OPENCV_INTRINSICS -DCMAKE_CXX_FLAGS="$EM_FLAGS" -DCMAKE_C_FLAGS="$EM_FLAGS"
+    cmake ../opencv-3.4.1 -GNinja -DCMAKE_TOOLCHAIN_FILE=$EM_TOOLCHAIN $OPENCV_CONF $OPENCV_INTRINSICS -DCMAKE_CXX_FLAGS="$EM_FLAGS" -DCMAKE_C_FLAGS="$EM_FLAGS" -DCMAKE_C_FLAGS_RELEASE="-DNDEBUG -O3" -DCMAKE_CXX_FLAGS_RELEASE="-DNDEBUG -O3"
     # -DBUILD_PERF_TESTS:BOOL="0" -DWITH_IPP:BOOL="0" -DBUILD_SHARED_LIBS:BOOL="0" -DBUILD_IPP_IW:BOOL="0" -DBUILD_ITT:BOOL="0" -DBUILD_opencv_apps:BOOL="0" -DCMAKE_CXX_FLAGS:STRING="-O3 --llvm-lto 1 --bind -s ASSERTIONS=0 --memory-init-file 0 -s INVOKE_RUN=0 -s SIMD=1 -s WASM=0" -DCV_ENABLE_INTRINSICS:BOOL="1" -DWITH_ITT:BOOL="0" -DBUILD_TESTS:BOOL="0" 
-    ninja
+    ninja -v
     cd $OURDIR
     echo "Building artoolkit"
     if [ ! -d "build-em" ] ; then
@@ -288,7 +290,7 @@ if [ $BUILD_EM ]; then
     cd build-em
     rm -f CMakeCache.txt
     rm -rf ./artoolkitx.js
-    emconfigure cmake .. -DCMAKE_BUILD_TYPE=${DEBUG+Debug}${DEBUG-Release} -DCMAKE_CXX_FLAGS="$EM_FLAGS $EM_ARTK_FLAGS" -DCMAKE_C_FLAGS="$EM_FLAGS $EM_ARTK_FLAGS"
+    emconfigure cmake .. -DCMAKE_BUILD_TYPE=${DEBUG+Debug}${DEBUG-Release} -DCMAKE_CXX_FLAGS="$EM_FLAGS $EM_ARTK_FLAGS" -DCMAKE_C_FLAGS="$EM_FLAGS $EM_ARTK_FLAGS" -DCMAKE_C_FLAGS_RELEASE="-DNDEBUG -O3" -DCMAKE_CXX_FLAGS_RELEASE="-DNDEBUG -O3" -DCMAKE_EXE_LINKER_FLAGS_RELEASE="-O3"
 
     if [ "${DEBUG+Debug}${DEBUG-Release}" = "Debug" ]; then
         emmake make VERBOSE=1
