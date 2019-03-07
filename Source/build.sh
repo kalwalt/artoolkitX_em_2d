@@ -266,7 +266,7 @@ if [ $BUILD_EM ]; then
     # EM_FLAGS="--llvm-lto 1 -s ASSERTIONS=1 -g4 -s SAFE_HEAP=1 --memory-init-file 0 -s INVOKE_RUN=0 -s NO_EXIT_RUNTIME=1"
     EM_TOOLCHAIN="$EMSCRIPTEN/cmake/Modules/Platform/Emscripten.cmake"
     OPENCV_INTRINSICS="-DCV_ENABLE_INTRINSICS=0 -DCPU_BASELINE="" -DCPU_DISPATCH="""
-    OPENCV_MODULES_EXCLUDE="-DBUILD_opencv_dnn=0 -DBUILD_opencv_ml=0 -DBUILD_opencv_objdetect=0 -DBUILD_opencv_photo=0 -DBUILD_opencv_shape=0 -DBUILD_opencv_shape=0 -DBUILD_opencv_stitching=0 -DBUILD_opencv_superres=0 -DBUILD_opencv_videostab=0 DWITH_TIFF=0 -DWITH_JASPER=0"
+    OPENCV_MODULES_EXCLUDE="-DBUILD_opencv_dnn=0 -DBUILD_opencv_ml=0 -DBUILD_opencv_objdetect=0 -DBUILD_opencv_photo=0 -DBUILD_opencv_shape=0 -DBUILD_opencv_shape=0 -DBUILD_opencv_stitching=0 -DBUILD_opencv_superres=0 -DBUILD_opencv_videostab=0 -DWITH_TIFF=0 -DWITH_JASPER=0"
     OPENCV_CONF="${OPENCV_MODULES_EXCLUDE} -DBUILD_opencv_apps=0 -DBUILD_JPEG=1 -DBUILD_PNG=1 -DBUILD_DOCS=0 -DBUILD_EXAMPLES=0 -DBUILD_IPP_IW=0 -DBUILD_PACKAGE=0 -DBUILD_PERF_TESTS=0 -DBUILD_TESTS=0 -DBUILD_WITH_DEBUG_INFO=0 -DWITH_PTHREADS_PF=0 -DWITH_PNG=1 -DWITH_WEBP=1 -DWITH_JPEG=1 -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=0 -DBUILD_ITT=0 -DWITH_IPP=0"
     echo "Building artoolkit for the web with Emscripten"
     echo "Building dependencies"
