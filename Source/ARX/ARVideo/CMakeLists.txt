@@ -10,7 +10,9 @@
 # their changes propagate to this main build file.
 #
 if(NOT ARX_TARGET_PLATFORM_WINDOWS)
-	find_package(JPEG REQUIRED)
+  if(NOT ARX_TARGET_PLATFORM_EMSCRIPTEN)
+    find_package(JPEG REQUIRED)
+  endif()
 else()
 	find_path(JPEG_INCLUDE_DIR
 		NAMES jconfig.h jmorecfg.h jpeglib.h jversion.h

@@ -268,7 +268,7 @@ if [ $BUILD_EM ]; then
     fi
     cd build-em
     rm -f CMakeCache.txt
-    emconfigure cmake .. -DCMAKE_BUILD_TYPE=${DEBUG+Debug}${DEBUG-Release}
+    emconfigure cmake .. -DCMAKE_BUILD_TYPE=${DEBUG+Debug}${DEBUG-Release} -DCMAKE_CXX_FLAGS="-s USE_LIBJPEG" -DCMAKE_C_FLAGS="-s USE_LIBJPEG" -DCMAKE_C_FLAGS_RELEASE="-DNDEBUG -O3" -DCMAKE_CXX_FLAGS_RELEASE="-DNDEBUG -O3"
     if [ "${DEBUG+Debug}${DEBUG-Release}" = "Debug" ]; then
         emmake make VERBOSE=1
     else
