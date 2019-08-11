@@ -3,15 +3,16 @@ if(NOT ARX_TARGET_PLATFORM_WINDOWS)
         find_package(ZLIB REQUIRED)
         find_path(
             STB_INCLUDE_DIR
-            stb_image 
+            stb_image
             NO_SYSTEM_ENVIRONMENT_PATH
         )
     else()
         find_path(
             STB_INCLUDE_DIR
-            stb_image 
+            stb_image
+            NAMES stb_image.h stb_image_write.h
             NO_SYSTEM_ENVIRONMENT_PATH
-            PATHS ${CMAKE_FIND_ROOT_PATH}/include
+            PATHS ${PROJECT_SOURCE_DIR}/depends/emscripten/include
         )
         add_definitions("-s USE_ZLIB=1")
     endif()
@@ -94,7 +95,7 @@ endif()
 target_include_directories(ARUtil
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     PRIVATE ${STB_INCLUDE_DIR}
-    PRIVATE ${ZLIB_INCLUDE_DIRS} 
+    PRIVATE ${ZLIB_INCLUDE_DIRS}
     PRIVATE ${PTHREAD_INCLUDE_DIRS}
 )
 
