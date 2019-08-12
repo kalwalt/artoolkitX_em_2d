@@ -338,13 +338,13 @@ void arwSetTrackerOptionInt(int option, int value)
         if (value < 0 || value > 255) return;
         gARTK->getSquareTracker()->setThreshold(value);
     } else if (option == ARW_TRACKER_OPTION_SQUARE_THRESHOLD_MODE) {
-        gARTK->getSquareTracker()->setThresholdMode(value);
+        gARTK->getSquareTracker()->setThresholdMode((AR_LABELING_THRESH_MODE)value);
     } else if (option == ARW_TRACKER_OPTION_SQUARE_LABELING_MODE) {
         gARTK->getSquareTracker()->setLabelingMode(value);
     } else if (option == ARW_TRACKER_OPTION_SQUARE_PATTERN_DETECTION_MODE) {
         gARTK->getSquareTracker()->setPatternDetectionMode(value);
     } else if (option == ARW_TRACKER_OPTION_SQUARE_MATRIX_CODE_TYPE) {
-        gARTK->getSquareTracker()->setMatrixCodeType(value);
+        gARTK->getSquareTracker()->setMatrixCodeType((AR_MATRIX_CODE_TYPE)value);
     } else if (option == ARW_TRACKER_OPTION_SQUARE_IMAGE_PROC_MODE) {
         gARTK->getSquareTracker()->setImageProcMode(value);
     } else if (option == ARW_TRACKER_OPTION_SQUARE_PATTERN_SIZE) {
@@ -396,11 +396,11 @@ int arwGetTrackerOptionInt(int option)
     } else if (option == ARW_TRACKER_OPTION_SQUARE_THRESHOLD_MODE) {
         return gARTK->getSquareTracker()->thresholdMode();
     } else if (option == ARW_TRACKER_OPTION_SQUARE_LABELING_MODE) {
-        return gARTK->getSquareTracker()->labelingMode();
+        return (int)gARTK->getSquareTracker()->labelingMode();
     } else if (option == ARW_TRACKER_OPTION_SQUARE_PATTERN_DETECTION_MODE) {
         return gARTK->getSquareTracker()->patternDetectionMode();
     } else if (option == ARW_TRACKER_OPTION_SQUARE_MATRIX_CODE_TYPE) {
-        return gARTK->getSquareTracker()->matrixCodeType();
+        return (int)gARTK->getSquareTracker()->matrixCodeType();
     } else if (option == ARW_TRACKER_OPTION_SQUARE_IMAGE_PROC_MODE) {
         return gARTK->getSquareTracker()->imageProcMode();
     } else if (option == ARW_TRACKER_OPTION_SQUARE_PATTERN_SIZE) {
@@ -719,6 +719,10 @@ float arwGetTrackableOptionFloat(int trackableUID, int option)
             if (trackable->type == ARTrackable::MULTI) return (float)((ARTrackableMultiSquare *)trackable)->config->cfPattCutoff;
             else return (NAN);
             break;
+        case ARW_TRACKABLE_OPTION_MULTI_MIN_INLIER_PROB:
+            if (trackable->type == ARTrackable::MULTI) return (float)((ARTrackableMultiSquare *)trackable)->config->minInlierProb;
+            else return (NAN);
+            break;
         default:
             ARLOGe("arwGetTrackableOptionFloat(): Unrecognised option %d.\n", option);
             break;
@@ -756,6 +760,9 @@ void arwSetTrackableOptionFloat(int trackableUID, int option, float value)
             break;
         case ARW_TRACKABLE_OPTION_MULTI_MIN_CONF_PATTERN:
             if (trackable->type == ARTrackable::MULTI) ((ARTrackableMultiSquare *)trackable)->config->cfPattCutoff = value;
+            break;
+        case ARW_TRACKABLE_OPTION_MULTI_MIN_INLIER_PROB:
+            if (trackable->type == ARTrackable::MULTI) ((ARTrackableMultiSquare *)trackable)->config->minInlierProb = value;
             break;
         default:
             ARLOGe("arwSetTrackableOptionFloat(): Unrecognised option %d.\n", option);

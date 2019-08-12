@@ -1,5 +1,5 @@
 /*
- *  arLabelingSub*.c
+ *  arRefineCorners.h
  *  artoolkitX
  *
  *  This file is part of artoolkitX.
@@ -28,32 +28,31 @@
  *  are not obligated to do so. If you do not wish to do so, delete this exception
  *  statement from your version.
  *
- *  Copyright 2018 Realmax, Inc.
- *  Copyright 2015 Daqri, LLC.
- *  Copyright 2003-2015 ARToolworks, Inc.
+ *  Copyright 2018 Dan Bell & Philip Lamb.
  *
- *  Author(s): Hirokazu Kato, Philip Lamb
+ *  Author(s): Dan Bell, Philip Lamb.
  *
  */
 
-#include <ARX/AR/config.h>
-#if !AR_DISABLE_LABELING_DEBUG_MODE
+#ifndef AR_REFINE_CORNERS_H
+#define AR_REFINE_CORNERS_H
 
-#undef AR_PIXEL_FORMAT_CCC
-#undef AR_PIXEL_FORMAT_CCCA
-#undef AR_PIXEL_FORMAT_ACCC
-#undef AR_PIXEL_FORMAT_C
-#undef AR_PIXEL_FORMAT_CY
-#undef AR_PIXEL_FORMAT_YC
-#undef AR_PIXEL_FORMAT_CCC_565
-#undef AR_PIXEL_FORMAT_CCCA_5551
-#undef AR_PIXEL_FORMAT_CCCA_4444
+#include <ARX/AR/ar.h>
 
-#define AR_LABELING_DEBUG_ENABLE_F
-#undef AR_LABELING_WHITE_REGION_F
-#define AR_LABELING_FRAME_IMAGE_F
-#define AR_LABELING_ADAPTIVE
+#if HAVE_OPENCV
 
-#include "arLabelingSub.h"
-
+#ifdef __cplusplus
+extern "C" {
 #endif
+
+// Given corner locations 'vertex' in observed coordinates, refine location.
+// buff is a luma-only buffer of dimensions width x height.
+void arRefineCorners(float vertex[4][2], const unsigned char *buff, int width, int height);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif // HAVE_OPENCV
+
+#endif // AR_REFINE_CORNERS_H

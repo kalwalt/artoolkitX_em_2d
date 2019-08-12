@@ -24,6 +24,32 @@ set(HAVE_GL 0)
 set(HAVE_GL3 0)
 set(HAVE_GLES2 0)
 set(USE_GL_STATE_CACHE 0)
+set(HAVE_GTSAM 0)
+
+# FindJPEG.cmake is so broken.
+if(ARX_TARGET_PLATFORM_LINUX)
+	find_package(JPEG REQUIRED)
+else()
+	find_path(JPEG_INCLUDE_DIR
+		NAMES jconfig.h jmorecfg.h jpeglib.h jversion.h
+		PATHS ${PROJECT_SOURCE_DIR}/depends/${ARX_PLATFORM_NAME_LC}/include
+		DOC "The directory where jpeg headers resides"
+		NO_CMAKE_SYSTEM_PATH
+	)
+    if(ARX_TARGET_PLATFORM_WINDOWS)
+        find_library(JPEG_LIBRARIES
+            NAMES libjpeg
+            PATHS ${PROJECT_SOURCE_DIR}/depends/${ARX_PLATFORM_NAME_LC}/lib/x64
+            DOC "The directory where jpeg static library resides"
+        )
+    else()
+        find_library(JPEG_LIBRARIES
+            NAMES jpeg
+            PATHS ${PROJECT_SOURCE_DIR}/depends/${ARX_PLATFORM_NAME_LC}/lib
+            DOC "The directory where jpeg static library resides"
+        )
+    endif()
+endif()
 
 find_package(OpenGL)
 if (OPENGL_FOUND)
@@ -54,6 +80,10 @@ if ((HAVE_GL OR HAVE_GL3) AND HAVE_GLES2)
         set(HAVE_GLES2 0)
         message(STATUS "Opting for desktop OpenGL. Set ARX_GL_PREFER_EMBEDDED to change.")
     endif()
+endif()
+find_package(GTSAM)
+if (GTSAM_FOUND)
+   set(HAVE_GTSAM 1)
 endif()
 
 # Create ARX/AR/config.h and allow subdirectories to find it.
@@ -90,6 +120,7 @@ set(PUBLIC_HEADERS
     include/ARX/ARController.h
     include/ARX/ARTrackable.h
     include/ARX/ARPattern.h
+    include/ARX/ARTrackableMultiSquareAuto.h
     include/ARX/ARTrackableMultiSquare.h
     include/ARX/ARTrackableNFT.h
     include/ARX/ARTrackable2d.h
@@ -110,6 +141,7 @@ set(SOURCE
     ARController.cpp
     ARTrackable.cpp
     ARPattern.cpp
+    ARTrackableMultiSquareAuto.cpp
     ARTrackableMultiSquare.cpp
     ARTrackableNFT.cpp
     ARTrackable2d.cpp
@@ -122,6 +154,8 @@ set(SOURCE
     ARVideoView.cpp
     trackingSub.h
     trackingSub.c
+    mapper.hpp
+    mapper.cpp
 )
 
 add_library(ARX ${ARX_LIBRARY_STYLE}
@@ -172,7 +206,11 @@ endif()
 if(HAVE_2D)
     add_dependencies(ARX OCVT)
     target_link_libraries(ARX PRIVATE OCVT)
-    target_include_directories(ARX PRIVATE ${OpenCV_INCLUDE_DIRS})
+endif()
+if(HAVE_GTSAM)
+    add_dependencies(ARX gtsam)
+    target_link_libraries(ARX PUBLIC gtsam)
+    target_include_directories(ARX PRIVATE ${GTSAM_INCLUDE_DIR})
 endif()
 
 if(ARX_TARGET_PLATFORM_WINDOWS) 
@@ -287,7 +325,11 @@ if (ARX_BUILD_PLUGIN)
     if(HAVE_2D)
         add_dependencies(ARX_plugin OCVT)
         target_link_libraries(ARX_plugin PRIVATE OCVT)
-        target_include_directories(ARX_plugin PRIVATE ${OpenCV_INCLUDE_DIRS})
+    endif()
+    if(HAVE_GTSAM)
+        add_dependencies(ARX_plugin gtsam)
+        target_link_libraries(ARX_plugin PUBLIC gtsam)
+        target_include_directories(ARX_plugin PRIVATE ${GTSAM_INCLUDE_DIR})
     endif()
     set_target_properties(ARX_plugin PROPERTIES OUTPUT_NAME ARX)
     if(ARX_TARGET_PLATFORM_MACOS)

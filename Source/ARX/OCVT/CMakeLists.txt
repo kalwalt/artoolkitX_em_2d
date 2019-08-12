@@ -1,25 +1,6 @@
-if(NOT ARX_TARGET_PLATFORM_WINDOWS)
-  if(NOT ARX_TARGET_PLATFORM_EMSCRIPTEN)
-    find_package(JPEG REQUIRED)
-  endif()
-else()
-	find_path(JPEG_INCLUDE_DIR
-		NAMES jconfig.h jmorecfg.h jpeglib.h jversion.h
-		PATHS ${PROJECT_SOURCE_DIR}/depends/windows/include
-		DOC "The directory where jpeg headers resides"
-	)
-
-	find_library(JPEG_LIBRARIES
-		NAMES libjpeg
-		PATHS ${PROJECT_SOURCE_DIR}/depends/windows/lib/x64
-		DOC "The directory where jpeg static library resides"
-	)
-endif()
-
 set(PUBLIC_HEADERS
     include/ARX/OCVT/PlanarTracker.h
 )
-
 
 set(PRIVATE_HEADERS
     OCVConfig.h
@@ -55,24 +36,23 @@ target_include_directories(OCVT
     PRIVATE ${OpenCV_INCLUDE_DIR}
 )
 
+target_link_libraries(OCVT
+    INTERFACE ${LIBS}
+    PRIVATE ${JPEG_LIBRARIES}
+)
 
 if(NOT ARX_TARGET_PLATFORM_WINDOWS)
 	target_link_libraries(OCVT
-		INTERFACE ${LIBS}
-		PRIVATE ${JPEG_LIBRARIES}
 		PRIVATE ${OpenCV_LIBS}
 	)
 else()
 	set (LINK_LIST "")
-	
 	foreach(x ${OpenCV_LIBS})
 		string(REPLACE ".lib" "341d.lib" x_debug ${x})
 		list (APPEND LINK_LIST debug ${x_debug} optimized ${x})
 	endforeach()
-	
 	target_link_libraries(OCVT
-		INTERFACE ${LIBS}
-	    ${LINK_LIST}
+	    PUBLIC ${LINK_LIST}
 	)
 endif()
 
