@@ -39,8 +39,7 @@
 
 #include <ARX/AR/ar.h>
 
-#if HAVE_OPENCV
-
+#if defined(HAVE_OPENCV)
 #ifdef __cplusplus
 extern "C" {
 #endif
