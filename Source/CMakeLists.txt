@@ -147,13 +147,6 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 # Configuration defaults.
-if (ARX_TARGET_PLATFORM_EMSCRIPTEN)
-    set(HAVE_NFT 0)
-    set(HAVE_2D 0)
-else()
-    set(HAVE_NFT 0)
-    set(HAVE_2D 0)
-endif()
 set(USE_CPARAM_SEARCH 0)
 set(ARX_INSTALL_LIBRARY_DIR "lib")
 
@@ -174,6 +167,14 @@ if(OpenCV_FOUND)
     set(HAVE_2D 1)
 else()
     message(WARNING "OpenCV not found, will build without 2D tracker" )
+endif()
+if (ARX_TARGET_PLATFORM_EMSCRIPTEN)
+    set(HAVE_OPENCV 0)
+    set(HAVE_NFT 0)
+    set(HAVE_2D 0)
+else()
+    set(HAVE_NFT 0)
+    set(HAVE_2D 0)
 endif()
 
 # Cached and project-specific platform variables.
