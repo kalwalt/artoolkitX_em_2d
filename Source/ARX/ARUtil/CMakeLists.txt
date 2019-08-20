@@ -7,6 +7,7 @@ if(NOT ARX_TARGET_PLATFORM_WINDOWS)
             NO_SYSTEM_ENVIRONMENT_PATH
         )
     else()
+        if(CMAKE_HOST_SYSTEM_NAME MATCHES "Linux")
         find_path(
             STB_INCLUDE_DIR
             stb_image
@@ -14,6 +15,14 @@ if(NOT ARX_TARGET_PLATFORM_WINDOWS)
             NO_SYSTEM_ENVIRONMENT_PATH
             PATHS ${PROJECT_SOURCE_DIR}/depends/emscripten/include
         )
+        else()
+        find_path(
+            STB_INCLUDE_DIR
+            stb_image
+            NO_SYSTEM_ENVIRONMENT_PATH
+            PATHS ${CMAKE_FIND_ROOT_PATH}/include
+        )
+        endif()
         add_definitions("-s USE_ZLIB=1")
     endif()
 else()
