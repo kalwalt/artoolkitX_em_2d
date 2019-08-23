@@ -14,7 +14,7 @@ message("CMAKE_CURRENT_BINARY_DIR: ${CMAKE_CURRENT_BINARY_DIR}")
 add_definitions("-std=c++11")
 
 link_directories(${CMAKE_CURRENT_BINARY_DIR}/../ARX ${CMAKE_CURRENT_BINARY_DIR}/../ARX/AR ${CMAKE_CURRENT_BINARY_DIR}/../ARX/ARUtil ${CMAKE_CURRENT_BINARY_DIR}/../ARX/AR2 ${CMAKE_CURRENT_BINARY_DIR}/../ARX/KPM ${CMAKE_CURRENT_BINARY_DIR}/../ARX/ARVideo ${CMAKE_CURRENT_BINARY_DIR}/../ARX/ARG)
-link_libraries(libARX libARVideo libAR libARG libARUtil)
+link_libraries(libARX libARVideo libAR libAR2 libARG libARUtil libKPM)
 
 add_executable(artoolkitx  ${PROJECT_SOURCE_DIR}/artoolkitx.js/ARX_js.cpp ${PROJECT_SOURCE_DIR}/artoolkitx.js/ARX_bindings.cpp)
 

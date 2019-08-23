@@ -67,7 +67,7 @@ if(ARX_TARGET_PLATFORM_VARIANT)
 else()
     if (ARX_TARGET_PLATFORM_EMSCRIPTEN)
         set(JPEG_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/depends/emscripten/libjpeg/includes)
-      
+
         set(JPEG_LIBRARIES ${PROJECT_SOURCE_DIR}/depends/emscripten/libjpeg/)
         message("JPEG_INCLUDE_DIR ${JPEG_LIBRARIES}")
         set(HAVE_INTEL_SIMD 0)
@@ -92,7 +92,7 @@ endif()
 add_definitions("-DARX_TARGET_PLATFORM_${ARX_PLATFORM_NAME_UC}=1")
 if(CMAKE_CONFIGURATION_TYPES)
   # Definitions for multi-configuration generator, e.g. Xcode, Visual Studio.
-  set_property(DIRECTORY APPEND PROPERTY 
+  set_property(DIRECTORY APPEND PROPERTY
     COMPILE_DEFINITIONS $<$<CONFIG:Debug>:DEBUG=1>
   )
 else()
@@ -170,11 +170,11 @@ else()
 endif()
 if (ARX_TARGET_PLATFORM_EMSCRIPTEN)
     set(HAVE_OPENCV 0)
-    set(HAVE_NFT 0)
+    set(HAVE_NFT 1)
     set(HAVE_2D 0)
 else()
-    set(HAVE_NFT 0)
-    set(HAVE_2D 0)
+    set(HAVE_NFT 1)
+    set(HAVE_2D 1)
 endif()
 
 # Cached and project-specific platform variables.
@@ -221,7 +221,7 @@ elseif(ARX_TARGET_PLATFORM_LINUX)
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -march=core2 -fPIC -Wl,-rpath-link,${PROJECT_SOURCE_DIR}/depends/${ARX_PLATFORM_NAME_FILESYSTEM}/lib")
         set(HAVE_INTEL_SIMD 1)
     endif()
-    
+
     set(VENDOR_DIR ${CMAKE_SOURCE_DIR}/vendor)
 
 elseif(ARX_TARGET_PLATFORM_WINDOWS)
@@ -248,4 +248,3 @@ else()
     add_subdirectory(depends)
     add_subdirectory(Utilities)
 endif()
-
