@@ -272,12 +272,12 @@ if [ $BUILD_EM ]; then
     #OPENCV_INTRINSICS="-DCV_ENABLE_INTRINSICS=0 -DCPU_BASELINE="" -DCPU_DISPATCH="""
     OPENCV_INTRINSICS="-DCV_ENABLE_INTRINSICS:BOOL=0 -DCPU_BASELINE="" -DCPU_DISPATCH="""
     #OPENCV_MODULES_EXCLUDE="-DBUILD_opencv_dnn=0 -DBUILD_opencv_ml=0 -DBUILD_opencv_objdetect=0 -DBUILD_opencv_photo=0 -DBUILD_opencv_shape=0 -DBUILD_opencv_shape=0 -DBUILD_opencv_stitching=0 -DBUILD_opencv_superres=0 -DBUILD_opencv_videostab=0 -DWITH_TIFF=0 -DWITH_JASPER=0"
-    OPENCV_MODULES_EXCLUDE="-DBUILD_opencv_dnn=0 -DBUILD_opencv_ml=0 -DBUILD_opencv_objdetect=0 -DBUILD_opencv_photo=0 -DWITH_IPP:BOOL=0 -DBUILD_IPP_IW:BOOL=0 -DBUILD_ITT:BOOL=0 -DBUILD_opencv_stitching=0 -DWITH_ITT:BOOL=0 -DBUILD_IPP_IW:BOOL=0 -DWITH_IPP:BOOL=0 -DBUILD_opencv_video:BOOL=1 -DBUILD_opencv_videoio:BOOL=1 -DWITH_ITT:BOOL=0 -DWITH_TIFF=0"
-    OPENCV_CONF="${OPENCV_MODULES_EXCLUDE} -DBUILD_PERF_TESTS:BOOL=0 -DBUILD_SHARED_LIBS:BOOL=0 -DBUILD_opencv_apps:BOOL=0 -DBUILD_TESTS:BOOL=0 -DBUILD_opencv_python_tests:BOOL=0 -DBUILD_opencv_apps:BOOL=0 -DWITH_PTHREADS_PF=0 -DCMAKE_BUILD_TYPE=Release"
+    OPENCV_MODULES_EXCLUDE="-DBUILD_opencv_dnn=0 -DBUILD_opencv_ml=0 -DBUILD_opencv_objdetect=0 -DBUILD_opencv_photo=0 -DWITH_IPP:BOOL=0 -DBUILD_IPP_IW:BOOL=0 -DBUILD_ITT:BOOL=0 -DBUILD_opencv_stitching=0 -DWITH_ITT:BOOL=0 -DBUILD_IPP_IW:BOOL=0 -DWITH_IPP:BOOL=0 -DBUILD_opencv_video:BOOL=1 -DBUILD_opencv_videoio:BOOL=1 -DWITH_ITT:BOOL=0 -DWITH_TIFF=0 -DWITH_JASPER=0"
+    OPENCV_CONF="${OPENCV_MODULES_EXCLUDE} -DBUILD_PERF_TESTS:BOOL=0 -DBUILD_SHARED_LIBS:BOOL=0 -DBUILD_opencv_apps:BOOL=0 -DBUILD_JPEG:BOOL=1 -DBUILD_PNG=1 -DBUILD_TESTS:BOOL=0 -DBUILD_opencv_python_tests:BOOL=0 -DBUILD_opencv_apps:BOOL=0 -DWITH_PTHREADS_PF=0 -DWITH_PNG=1 -DWITH_WEBP=1 -DWITH_JPEG:BOOL=1 -DCMAKE_BUILD_TYPE=Release"
     #OPENCV_CONF="${OPENCV_MODULES_EXCLUDE} -DBUILD_opencv_apps=0 -DBUILD_JPEG=1 -DBUILD_PNG=1 -DBUILD_DOCS=0 -DBUILD_EXAMPLES=0 -DBUILD_IPP_IW=0 -DBUILD_PACKAGE=0 -DBUILD_PERF_TESTS=0 -DBUILD_TESTS=0 -DBUILD_WITH_DEBUG_INFO=0 -DWITH_PTHREADS_PF=0 -DWITH_PNG=1 -DWITH_WEBP=1 -DWITH_JPEG=1 -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=0 -DBUILD_ITT=0 -DWITH_IPP=0"
     echo "Building artoolkit for the web with Emscripten"
     echo "Building dependencies"
-    EM_ARTK_FLAGS="-msse -msse2 -msse3 -mssse3 -I$OURDIR/depends/emscripten/opencv-em -I$OURDIR/depends/emscripten/opencv-em/modules/core/include -I$OURDIR/depends/emscripten/opencv-em/modules/highgui/include -I$OURDIR/depends/emscripten/opencv-em/modules/imgcodecs/include -I$OURDIR/depends/emscripten/opencv-em/modules/videoio/include -I$OURDIR/depends/emscripten/opencv-em/modules/imgproc/include -I$OURDIR/depends/emscripten/opencv-em/modules/calib3d/include -I$OURDIR/depends/emscripten/opencv-em/modules/features2d/include -I$OURDIR/depends/emscripten/opencv-em/modules/flann/include -I$OURDIR/depends/emscripten/opencv-em/modules/video/include -I$OURDIR/ARX/OCVT/include"
+    EM_ARTK_FLAGS="-msse -msse2 -msse3 -mssse3 -I$OURDIR/depends/emscripten/opencv-em -I$OURDIR/depends/emscripten/opencv-em/modules/core/include -I$OURDIR/depends/emscripten/opencv-em/modules/highgui/include -I$OURDIR/depends/emscripten/opencv-em/modules/imgcodecs/include -I$OURDIR/depends/emscripten/opencv-em/modules/videoio/include -I$OURDIR/depends/emscripten/opencv-em/modules/imgproc/include -I$OURDIR/depends/emscripten/opencv-em/modules/calib3d/include -I$OURDIR/depends/emscripten/opencv-em/modules/features2d/include -I$OURDIR/depends/emscripten/opencv-em/modules/flann/include -I$OURDIR/depends/emscripten/opencv-em/modules/video/include -I$OURDIR/ARX/OCVT/include -I$OURDIR/depends/emscripten/opencv-em/build_opencv_em_ui"
     cd $OURDIR
     cd depends/emscripten/
     if [ ! -d "build_opencv-em" ] ; then
@@ -286,7 +286,7 @@ if [ $BUILD_EM ]; then
     cd build_opencv-em
     cmake ../opencv-em -GNinja -DCMAKE_TOOLCHAIN_FILE=$EM_TOOLCHAIN $OPENCV_CONF $OPENCV_INTRINSICS -DCMAKE_CXX_FLAGS="$EM_FLAGS" -DCMAKE_C_FLAGS="$EM_FLAGS" -DCMAKE_C_FLAGS_RELEASE="-DNDEBUG -O3" -DCMAKE_CXX_FLAGS_RELEASE="-DNDEBUG -O3"
     # -DBUILD_PERF_TESTS:BOOL="0" -DWITH_IPP:BOOL="0" -DBUILD_SHARED_LIBS:BOOL="0" -DBUILD_IPP_IW:BOOL="0" -DBUILD_ITT:BOOL="0" -DBUILD_opencv_apps:BOOL="0" -DCMAKE_CXX_FLAGS:STRING="-O3 --llvm-lto 1 --bind -s ASSERTIONS=0 --memory-init-file 0 -s INVOKE_RUN=0 -s SIMD=1 -s WASM=0" -DCV_ENABLE_INTRINSICS:BOOL="1" -DWITH_ITT:BOOL="0" -DBUILD_TESTS:BOOL="0"
-    ninja -v
+    ninja -j 1 -v
     cd $OURDIR
     echo "Building artoolkit"
     if [ ! -d "build-em" ] ; then
