@@ -1,0 +1,1 @@
+-Oz --llvm-lto 1 --bind -s ASSERTIONS=0 --memory-init-file 0 -s INVOKE_RUN=0 -s NO_EXIT_RUNTIME=1
