@@ -283,10 +283,10 @@ if [ $BUILD_EM ]; then
     if [ ! -d "build_opencv-em" ] ; then
       mkdir build_opencv-em
     fi
-    cd build_opencv-em
-    cmake ../opencv-em -GNinja -DCMAKE_TOOLCHAIN_FILE=$EM_TOOLCHAIN $OPENCV_CONF $OPENCV_INTRINSICS -DCMAKE_CXX_FLAGS="$EM_FLAGS" -DCMAKE_C_FLAGS="$EM_FLAGS" -DCMAKE_C_FLAGS_RELEASE="-DNDEBUG -O3" -DCMAKE_CXX_FLAGS_RELEASE="-DNDEBUG -O3"
+    #cd build_opencv-em
+    #cmake ../opencv-em -GNinja -DCMAKE_TOOLCHAIN_FILE=$EM_TOOLCHAIN $OPENCV_CONF $OPENCV_INTRINSICS -DCMAKE_CXX_FLAGS="$EM_FLAGS" -DCMAKE_C_FLAGS="$EM_FLAGS" -DCMAKE_C_FLAGS_RELEASE="-DNDEBUG -O3" -DCMAKE_CXX_FLAGS_RELEASE="-DNDEBUG -O3"
     # -DBUILD_PERF_TESTS:BOOL="0" -DWITH_IPP:BOOL="0" -DBUILD_SHARED_LIBS:BOOL="0" -DBUILD_IPP_IW:BOOL="0" -DBUILD_ITT:BOOL="0" -DBUILD_opencv_apps:BOOL="0" -DCMAKE_CXX_FLAGS:STRING="-O3 --llvm-lto 1 --bind -s ASSERTIONS=0 --memory-init-file 0 -s INVOKE_RUN=0 -s SIMD=1 -s WASM=0" -DCV_ENABLE_INTRINSICS:BOOL="1" -DWITH_ITT:BOOL="0" -DBUILD_TESTS:BOOL="0"
-    ninja -j 1 -v
+    #ninja -j 1 -v
     cd $OURDIR
     echo "Building artoolkit"
     if [ ! -d "build-em" ] ; then
