@@ -14,7 +14,7 @@
 OURDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 function usage {
-    echo "Usage: $(basename $0) [--debug] (macos | windows | ios | linux | android | linux-raspbian | emscripten | docs)... [tests] [examples] [unity]"
+    echo "Usage: $(basename $0) [--debug] (macos | windows | ios | linux | android | linux-raspbian | emscripten | docs)... [tests] [examples] [unity] [cmake \"<generator>\"]"
     exit 1
 }
 
@@ -51,6 +51,9 @@ do
         docs) BUILD_DOCS=1
             ;;
         --debug) DEBUG=
+            ;;
+        cmake) CMAKE_GENERATOR="$2"
+            shift
             ;;
         --*) echo "bad option $1"
             usage
@@ -98,6 +101,12 @@ else
     CPUS=1
 fi
 
+# Set default CMake generator for Windows.
+echo "$CMAKE_GENERATOR"
+if [ $OS = "Windows" ]  && test -z "$CMAKE_GENERATOR"; then
+    CMAKE_GENERATOR="Visual Studio 15 2017 Win64"
+fi
+
 # Function to allow check for required packages.
 function check_package {
 	# Variant for distros that use debian packaging.
@@ -121,7 +130,7 @@ if [ "$OS" = "Darwin" ] ; then
 # macOS
 if [ $BUILD_MACOS ] ; then
     if [ ! -d "depends/macos/Frameworks/opencv2.framework" ] ; then
-        curl --location "https://github.com/artoolkitx/opencv/releases/download/3.4.1-dev-artoolkitx/opencv-3.4.1-dev-artoolkitx-macos.zip" -o opencv2.zip
+        curl --location "https://github.com/artoolkitx/opencv/releases/download/4.0.0-pre-artoolkitx/opencv-4.0.0-pre-artoolkitx-macos.zip" -o opencv2.zip
         unzip opencv2.zip -d depends/macos/Frameworks
         rm opencv2.zip
     fi
@@ -152,7 +161,7 @@ if [ $BUILD_IOS ] ; then
 
     
     if [ ! -d "depends/ios/Frameworks/opencv2.framework" ] ; then
-        curl "https://phoenixnap.dl.sourceforge.net/project/opencvlibrary/opencv-ios/3.4.1/opencv-3.4.1-ios-framework.zip" -o opencv2.zip
+        curl --location "https://github.com/artoolkitx/opencv/releases/download/4.0.0-pre-artoolkitx/opencv-4.0.0-pre-artoolkitx-ios.zip" -o opencv2.zip
         unzip opencv2.zip -d depends/ios/Frameworks
         rm opencv2.zip
     fi
@@ -471,7 +480,7 @@ if [ $BUILD_WINDOWS ] ; then
 
     cd build-windows
     rm -f CMakeCache.txt
-    cmake.exe .. -G "Visual Studio 15 2017 Win64" -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=TRUE
+    cmake.exe .. -G "$CMAKE_GENERATOR" -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=TRUE
     cmake.exe --build . --config ${DEBUG+Debug}${DEBUG-Release} --target install
     cp $OURDIR/depends/windows/lib/x64/opencv* $OURDIR/../SDK/bin
     cp $OURDIR/depends/windows/lib/x64/SDL2.dll $OURDIR/../SDK/bin
@@ -482,7 +491,7 @@ if [ $BUILD_WINDOWS ] ; then
     (cd "../Examples/Square tracking example/Windows"
         mkdir -p build-windows
         cd build-windows
-        cmake.exe .. -DCMAKE_CONFIGURATION_TYPES=${DEBUG+Debug}${DEBUG-Release} "-GVisual Studio 15 2017 Win64"
+        cmake.exe .. -DCMAKE_CONFIGURATION_TYPES=${DEBUG+Debug}${DEBUG-Release} "-G$CMAKE_GENERATOR"
         cmake.exe --build . --config ${DEBUG+Debug}${DEBUG-Release}  --target install
         #Copy needed dlls into the corresponding Visual Studio directory to allow running examples from inside the Visual Studio GUI
         mkdir -p ${DEBUG+Debug}${DEBUG-Release}
@@ -494,7 +503,7 @@ if [ $BUILD_WINDOWS ] ; then
     (cd "../Examples/2d tracking example/Windows"
         mkdir -p build-windows
         cd build-windows
-        cmake.exe .. -DCMAKE_CONFIGURATION_TYPES=${DEBUG+Debug}${DEBUG-Release} "-GVisual Studio 15 2017 Win64"
+        cmake.exe .. -DCMAKE_CONFIGURATION_TYPES=${DEBUG+Debug}${DEBUG-Release} "-G$CMAKE_GENERATOR"
         cmake.exe --build . --config ${DEBUG+Debug}${DEBUG-Release}  --target install
         #Copy needed dlls into the corresponding Visual Studio directory to allow running examples from inside the Visual Studio GUI
         mkdir -p ${DEBUG+Debug}${DEBUG-Release}

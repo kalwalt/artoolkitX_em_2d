@@ -91,10 +91,25 @@ typedef struct {
     ARdouble                cfPattCutoff;   // Minimum matching confidence required for any pattern markers in order to consider them when calculating the multimarker pose. Default value is AR_MULTI_CONFIDENCE_PATTERN_CUTOFF_DEFAULT.
     ARdouble                cfMatrixCutoff; // Minimum matching confidence required for any matrix markers in order to consider them when calculating the multimarker pose. Default value is AR_MULTI_CONFIDENCE_MATRIX_CUTOFF_DEFAULT.
     int                     min_submarker;  // Minimum number of markers in this set that must be detected in order to consider it a valid multimarker detection.
+    ARdouble                minInlierProb;  // Minimum allowable inlier probability when performing robust multimarker pose estimation.
 } ARMultiMarkerInfoT;
 
+/**
+ *  Creates a new empty multi-marker configuration.
+ *  The returned value should be freed by calling arMultiFreeConfig when done.
+ */
 AR_EXTERN ARMultiMarkerInfoT *arMultiAllocConfig(void);
+    
+/**
+ *  Takes a deep copy of the multi-marker configuration passed in.
+ *  The returned value should be freed by calling arMultiFreeConfig when done.
+ */
+AR_EXTERN ARMultiMarkerInfoT *arMultiCopyConfig(const ARMultiMarkerInfoT *marker_info);
 
+/**
+ *  Creates a new multi-marker configuration and fills it with the config from the multi-marker config file.
+ *  The returned value should be freed by calling arMultiFreeConfig when done.
+ */
 AR_EXTERN ARMultiMarkerInfoT *arMultiReadConfigFile( const char *filename, ARPattHandle *pattHandle );
     
 AR_EXTERN int arMultiAddOrUpdateSubmarker(ARMultiMarkerInfoT *marker_info, int patt_id, int patt_type, ARdouble width, const ARdouble trans[3][4], uint64_t globalID);
@@ -103,6 +118,9 @@ AR_EXTERN void arMultiUpdateSubmarkerPose(ARMultiEachMarkerInfoT *submarker, con
     
 AR_EXTERN int arMultiRemoveSubmarker(ARMultiMarkerInfoT *marker_info, int patt_id, int patt_type, uint64_t globalID);
 
+/**
+ *  Frees the multi-marker configuration passed in.
+ */
 AR_EXTERN int arMultiFreeConfig( ARMultiMarkerInfoT *config );
 
 AR_EXTERN ARdouble  arGetTransMatMultiSquare(AR3DHandle *handle, ARMarkerInfo *marker_info, int marker_num,
