@@ -80,3 +80,4 @@ Source/depends/emscripten/build_opencv-em.1
 Source/depends/emscripten/build_opencv-em.2
 Source/depends/emscripten/opencv-3.4.1/build_test
 *.a
+opencv4.1-em-wasm.zip
