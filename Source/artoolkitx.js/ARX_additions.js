@@ -9,19 +9,6 @@ function _arrayToHeap(typedArray) {
     return heapBytes;
 }
 
-Module["getProjectionMatrix"] = function(nearPlane, farPlane) {
-    var projectionMatrix = new Float64Array(16);
-    var heapBytes = _arrayToHeap(projectionMatrix);
-
-    if( ! Module.ccall('arwGetProjectionMatrix', 'boolean',['number','number','number'], [nearPlane, farPlane, heapBytes.byteOffset])) {
-        return undefined;
-    }
-    var returnValue = new Float64Array(heapBytes);
-    Module._free(heapBytes.byteOffset);
-
-    return returnValue;
-};
-
 Module["getTrackablePatternConfig"] = function (trackableId, patternID) {
     var heapBytes = _arrayToHeap(new Float64Array(16));
     var widthHeapBytes = _arrayToHeap(new Float64Array(1));
@@ -47,7 +34,7 @@ Module["getTrackablePatternConfig"] = function (trackableId, patternID) {
 
     return returnObject;
 }
-    
+
 Module["getTrackablePatternImage"] = function (trackableId, patternID) {
 
     //Read trackable pattern config to get the size of the trackable. This is needed to define the Array size.
