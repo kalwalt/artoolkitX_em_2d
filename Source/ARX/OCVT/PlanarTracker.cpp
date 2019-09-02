@@ -409,10 +409,11 @@ public:
 
     void ProcessFrameData(unsigned char * frame)
     {
+        cv::Mat data(_frameSizeY, _frameSizeX, CV_8UC4, frame);
         // When using emscripten the image comes in as RGB image from the browser
         // Convert it to Gray
         #if ARX_TARGET_PLATFORM_EMSCRIPTEN
-          cv::UMat colorFrame(_frameSizeY, _frameSizeX, CV_8UC4, frame, cv::USAGE_DEFAULT);
+          cv::UMat colorFrame = data.getUMat(cv::ACCESS_READ);
           cv::UMat grayFrame(_frameSizeY, _frameSizeX, CV_8UC1);
           cv::cvtColor(colorFrame, grayFrame, cv::COLOR_RGBA2GRAY);
           ProcessFrame(grayFrame);
