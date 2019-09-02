@@ -48,23 +48,23 @@ class OCVFeatureDetector
 {
 public:
     OCVFeatureDetector();
-    
+
     bool AddDescriptorsToDictionary(int id, cv::Mat descriptors);
-    
-    std::vector<cv::KeyPoint> DetectAndCompute(cv::Mat frame, cv::Mat mask, cv::Mat &desc);
-        
+
+    std::vector<cv::KeyPoint> DetectAndCompute(cv::UMat frame, cv::UMat mask, cv::Mat &desc);
+
     std::vector< std::vector<cv::DMatch> >  MatchFeatures(cv::Mat first_desc, cv::Mat desc);
-    
+
     void SetFeatureDetector(int detectorType);
 
     // static int count;
-    
+
 private:
     void CreateAkazeFeatureDetector();
     void CreateORBFeatureDetector();
     void CreateKazeFeatureDetector();
     void CreateBriskFeatureDetector();
-    
+
     std::map<int, cv::Mat> _visualDictionary;
     cv::Ptr<cv::DescriptorMatcher> _matcher;
     cv::Ptr<cv::Feature2D> _featureDetector;

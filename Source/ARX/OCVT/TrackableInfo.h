@@ -46,23 +46,23 @@ class TrackableInfo
 public:
     int _id;
     float _scale;
-    cv::Mat _image;
+    cv::UMat _image;
     std::vector<cv::Point2f> _points;
     int _width;
     int _height;
     std::string _fileName;
-    
+
     cv::Mat _pose;
     std::vector<cv::KeyPoint> _featurePoints;
     cv::Mat _descriptors;
     std::vector<cv::Point2f> _cornerPoints;
-    
+
     std::vector<cv::Point2f> _bBox;
     std::vector<cv::Point2f> _bBoxTransformed;
     bool _isTracking, _isDetected, _resetTracks;
-    
+
     TrackingPointSelector _trackSelection;
-    
+
     void CleanUp()
     {
         _image.release();

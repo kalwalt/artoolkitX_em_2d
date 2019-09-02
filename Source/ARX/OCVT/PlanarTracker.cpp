@@ -578,7 +578,8 @@ public:
         TrackableInfo newTrackable;
         #if ARX_TARGET_PLATFORM_EMSCRIPTEN
           std::cout << "Add Marker EM" << std::endl;
-          cv::UMat colorImage(height, width, CV_8UC4, buff, cv::USAGE_DEFAULT);
+          cv::Mat data(_frameSizeY, _frameSizeX, CV_8UC4, buff);
+          cv::UMat colorImage = data.getUMat(cv::ACCESS_READ);
           cv::UMat grayImage(_frameSizeY, _frameSizeX, CV_8UC1);
           cv::cvtColor(colorImage, grayImage, cv::COLOR_RGBA2GRAY);
           newTrackable._image = grayImage;
