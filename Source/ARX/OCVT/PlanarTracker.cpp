@@ -623,7 +623,7 @@ public:
             newTrackable._scale = scale;
             newTrackable._width = newTrackable._image.cols;
             newTrackable._height = newTrackable._image.rows;
-            newTrackable._featurePoints = _featureDetector.DetectAndCompute(newTrackable._image, cv::Mat(), newTrackable._descriptors);
+            newTrackable._featurePoints = _featureDetector.DetectAndCompute(newTrackable._image, cv::UMat(), newTrackable._descriptors);
             // newTrackable._featurePoints = _featureDetector.DetectFeatures(newTrackable._image, cv::Mat());
             // newTrackable._descriptors = _featureDetector.CalcDescriptors(newTrackable._image, newTrackable._featurePoints);
             newTrackable._cornerPoints = _harrisDetector.FindCorners(newTrackable._image);
