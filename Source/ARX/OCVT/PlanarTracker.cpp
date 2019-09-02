@@ -616,7 +616,7 @@ public:
     void AddMarker(std::string imageName, int uid, float scale)
     {
         TrackableInfo newTrackable;
-        newTrackable._image = cv::imread(imageName, 0);
+        cv::imread(imageName, 0).copyTo(newTrackable._image);
         if(!newTrackable._image.empty()) {
             newTrackable._id = uid;
             newTrackable._fileName = imageName;
