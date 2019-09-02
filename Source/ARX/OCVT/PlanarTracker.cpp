@@ -360,7 +360,7 @@ public:
 
                             if((templateBoundingBox.area() > 0) &&(searchROI.area() > templateBoundingBox.area())) {
                                 cv::UMat searchImage = frame(searchROI);
-                                cv::Mat templateImage = _trackables[trackableId]._image(templateBoundingBox);
+                                cv::UMat templateImage = _trackables[trackableId]._image(templateBoundingBox);
                                 cv::UMat warpedTemplate;
 
                                 warpPerspective(templateImage, warpedTemplate, templateHomography, srcBoundingBox.size());
@@ -594,7 +594,7 @@ public:
             newTrackable._width = newTrackable._image.cols;
             newTrackable._height = newTrackable._image.rows;
             std::cout << "Add Marker DetectFeatures" << std::endl;
-            newTrackable._featurePoints = _featureDetector.DetectAndCompute(newTrackable._image, cv::Mat(), newTrackable._descriptors);
+            newTrackable._featurePoints = _featureDetector.DetectAndCompute(newTrackable._image, cv::UMat(), newTrackable._descriptors);
             std::cout << "Add Marker CalcDescriptors" << std::endl;
             // newTrackable._descriptors = _featureDetector.CalcDescriptors(newTrackable._image, newTrackable._featurePoints);
             std::cout << "Add Marker FindCorners" << std::endl;

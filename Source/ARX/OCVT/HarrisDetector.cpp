@@ -44,16 +44,15 @@ HarrisDetector::HarrisDetector()
 {
     _termcrit = cv::TermCriteria(cv::TermCriteria::COUNT|cv::TermCriteria::EPS,20,0.03);
 }
-    
-std::vector<cv::Point2f> HarrisDetector::FindCorners(cv::Mat gray)
+
+std::vector<cv::Point2f> HarrisDetector::FindCorners(cv::UMat gray)
 {
-    cv::Mat mask = cv::Mat::zeros(gray.size(), CV_8UC1);
+    cv::UMat mask = cv::UMat::zeros(gray.size(), CV_8UC1);
     cv::Rect innerRegion(harrisBorder,harrisBorder,gray.cols-(harrisBorder*2), gray.rows-(harrisBorder*2));
-    cv::Mat maskRoi = mask(innerRegion);
+    cv::UMat maskRoi = mask(innerRegion);
     maskRoi.setTo(cv::Scalar(255));
     std::vector<cv::Point2f> trackablePointsWarped;
     goodFeaturesToTrack(gray, trackablePointsWarped, MAX_COUNT, 0.1, 10, mask, 3, false, 0.04);
     mask.release();
     return trackablePointsWarped;
 }
-
