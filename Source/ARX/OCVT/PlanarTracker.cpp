@@ -94,14 +94,14 @@ public:
         }
     }
 
-    cv::Mat CreateFeatureMask(cv::Mat frame)
+    cv::UMat CreateFeatureMask(cv::UMat frame)
     {
-        cv::Mat featureMask;
+        cv::UMat featureMask;
         for(int i=0;i<_trackables.size(); i++) {
             if(_trackables[i]._isDetected) {
                 if(featureMask.empty()) {
                     //Only create mask if we have something to draw in it.
-                    featureMask = cv::Mat::ones(frame.size(), CV_8UC1);
+                    featureMask = cv::UMat::ones(frame.size(), CV_8UC1);
                 }
                 std::vector<std::vector<cv::Point> > contours(1);
                 for(int j=0; j<4; j++) {
@@ -397,7 +397,7 @@ public:
         }
     }
 
-    void BuildImagePyramid(cv::Mat frame)
+    void BuildImagePyramid(cv::UMat frame)
     {
         cv::buildOpticalFlowPyramid(frame, _pyramid, winSize, maxLevel);
     }
@@ -436,9 +436,9 @@ public:
         // }
         // OCVFeatureDetector::count = 2;
         if(CanDetectNewFeatures()) {
-            cv::Mat detectionFrame;
+            cv::UMat detectionFrame;
             cv::pyrDown(frame, detectionFrame, cv::Size(frame.cols/featureDetectPyramidLevel, frame.rows/featureDetectPyramidLevel));
-            cv::Mat featureMask = CreateFeatureMask(detectionFrame);
+            cv::UMat featureMask = CreateFeatureMask(detectionFrame);
             // std::vector<cv::KeyPoint> newFrameFeatures = _featureDetector.DetectFeatures(detectionFrame, featureMask);
             cv::Mat newFrameDescriptors;
             std::vector<cv::KeyPoint> newFrameFeatures = _featureDetector.DetectAndCompute(detectionFrame, featureMask, newFrameDescriptors);
@@ -577,8 +577,8 @@ public:
         TrackableInfo newTrackable;
         #if ARX_TARGET_PLATFORM_EMSCRIPTEN
           std::cout << "Add Marker EM" << std::endl;
-          cv::Mat colorImage(height, width, CV_8UC4, buff);
-          cv::Mat grayImage(_frameSizeY, _frameSizeX, CV_8UC1);
+          cv::UMat colorImage(height, width, CV_8UC4, buff, cv::USAGE_DEFAULT);
+          cv::UMat grayImage(_frameSizeY, _frameSizeX, CV_8UC1);
           cv::cvtColor(colorImage, grayImage, cv::COLOR_RGBA2GRAY);
           newTrackable._image = grayImage;
         #else
