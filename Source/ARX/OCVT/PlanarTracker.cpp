@@ -721,10 +721,7 @@ public:
                 info.fileName = _trackables[i]._fileName;
                 // Copy the image data and use a shared_ptr to refer to it.
                 unsigned char *data = (unsigned char *)malloc(_trackables[i]._width * _trackables[i]._height);
-                /// this needs to be verifyed!!
-                cv::Mat dataPtr(_trackables[i]._width, _trackables[i]._height, CV_8UC4, data);
-                _trackables[i]._image = dataPtr.getUMat(cv::ACCESS_READ);
-                //memcpy(data, _trackables[i]._image.ptr(), _trackables[i]._width * _trackables[i]._height);
+                memcpy(data, _trackables[i]._image.getMat(cv::ACCESS_READ).ptr(), _trackables[i]._width * _trackables[i]._height);
                 info.imageData.reset(data, free);
                 info.width = _trackables[i]._width;
                 info.height = _trackables[i]._height;
