@@ -409,13 +409,12 @@ public:
 
     void ProcessFrameData(unsigned char * frame)
     {
-        cv::Mat data(_frameSizeY, _frameSizeX, CV_8UC4, frame);
         // When using emscripten the image comes in as RGB image from the browser
         // Convert it to Gray
         #if ARX_TARGET_PLATFORM_EMSCRIPTEN
-          cv::UMat colorFrame = data.getUMat(cv::ACCESS_READ);
+          cv::Mat colorFrame(_frameSizeY, _frameSizeX, CV_8UC4, frame);
           cv::UMat grayFrame(_frameSizeY, _frameSizeX, CV_8UC1);
-          cv::cvtColor(colorFrame, grayFrame, cv::COLOR_RGBA2GRAY);
+          cv::cvtColor(colorFrame.getUMat(cv::ACCESS_RW), grayFrame, cv::COLOR_RGBA2GRAY);
           ProcessFrame(grayFrame);
           grayFrame.release();
         #else
@@ -586,7 +585,7 @@ public:
           cv::cvtColor(colorImage.getUMat(cv::ACCESS_RW), grayImage, cv::COLOR_RGBA2GRAY);
           newTrackable._image = grayImage;
         #else
-          newTrackable._image = cv::Mat(height, width, CV_8UC1, buff);
+          newTrackable._image = cv::Mat(height, width, CV_8UC1, buff).getUMat();
         #endif
         std::cout << "Add Marker _image" << std::endl;
         if(!newTrackable._image.empty()) {
