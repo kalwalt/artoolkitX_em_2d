@@ -504,7 +504,7 @@ public:
                     fs << "trackableId" + index << _trackables[i]._id;
                     fs << "trackableFileName" + index << _trackables[i]._fileName;
                     fs << "trackableScale" + index << _trackables[i]._scale;
-                    //fs << "trackableImage" + index << _trackables[i]._image;
+                    fs << "trackableImage" + index << _trackables[i]._image.getMat(cv::ACCESS_RW);
                     fs << "trackableWidth" + index << _trackables[i]._width;
                     fs << "trackableHeight" + index << _trackables[i]._height;
                     fs << "trackableDescriptors" + index << _trackables[i]._descriptors;
@@ -543,7 +543,8 @@ public:
                     fs["trackableId" + index] >> newTrackable._id;
                     fs["trackableFileName" + index] >> newTrackable._fileName;
                     fs["trackableScale" + index] >> newTrackable._scale;
-                    //fs["trackableImage" + index] >> newTrackable._image;
+                    cv::Mat image = newTrackable._image.getMat(cv::ACCESS_RW);
+                    fs["trackableImage" + index] >> image;
                     fs["trackableWidth" + index] >> newTrackable._width;
                     fs["trackableHeight" + index] >> newTrackable._height;
                     fs["trackableDescriptors" + index] >> newTrackable._descriptors;
