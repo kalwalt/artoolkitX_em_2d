@@ -369,7 +369,7 @@ public:
                                 if(!matchResult.empty()) {
                                     double minVal; double maxVal;
                                     cv::Point minLoc, maxLoc, matchLoc;
-                                    minMaxLoc( matchResult, &minVal, &maxVal, &minLoc, &maxLoc, cv::Mat() );
+                                    minMaxLoc( matchResult, &minVal, &maxVal, &minLoc, &maxLoc, cv::UMat() );
                                     if(minVal<0.5) {
                                         matchLoc = minLoc;
                                         matchLoc.x+=searchROI.x + (warpedTemplate.cols/2);
