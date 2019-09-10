@@ -580,10 +580,11 @@ public:
           std::cout << "Add Marker EM" << std::endl;
           cv::Mat colorImage(height, width, CV_8UC4, buff);
           std::cout << "colorImage ok!" << std::endl;
-          cv::UMat grayImage(_frameSizeY, _frameSizeX, CV_8UC1);
+          cv::Mat grayImage(_frameSizeY, _frameSizeX, CV_8UC1);
           std::cout << "grayImage ok!" << std::endl;
-          cv::cvtColor(colorImage.getUMat(cv::ACCESS_RW), grayImage, cv::COLOR_RGBA2GRAY);
-          newTrackable._image = grayImage;
+          cv::cvtColor(colorImage, grayImage, cv::COLOR_RGBA2GRAY);
+          std::cout << "grayImage ok 2!" << std::endl;
+          newTrackable._image = grayImage.getUMat(cv::ACCESS_RW);
         #else
           newTrackable._image = cv::Mat(height, width, CV_8UC1, buff).getUMat();
         #endif
