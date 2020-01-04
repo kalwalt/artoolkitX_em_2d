@@ -159,7 +159,7 @@ fi
 # iOS
 if [ $BUILD_IOS ] ; then
 
-    
+
     if [ ! -d "depends/ios/Frameworks/opencv2.framework" ] ; then
         curl --location "https://github.com/artoolkitx/opencv/releases/download/4.0.0-pre-artoolkitx/opencv-4.0.0-pre-artoolkitx-ios.zip" -o opencv2.zip
         unzip opencv2.zip -d depends/ios/Frameworks
@@ -242,7 +242,7 @@ else
         cd $OURDIR
         cp -v "../Examples/Square tracking example/Android/ARSquareTracking/ARSquareTrackingExample/build/outputs/apk/release/"ARSquareTrackingExample-release-unsigned.apk ../Examples/
         cp -v "../Examples/Square tracking example with OSG/Android/ARSquareTracking/ARSquareTrackingExample/build/outputs/apk/release/"ARSquareTrackingExample-release-unsigned.apk ../Examples/ARSquareTrackingExampleOSG-release-unsigned.apk
-        
+
         echo "Building example AR2dTracking as APK"
         cd $OURDIR
         cd "../Examples/2d tracking example/Android/AR2DTracking_Proj"; ./gradlew -q assembleRelease;
@@ -251,7 +251,7 @@ else
 
     fi
 fi
-    
+
 fi
 # /BUILD_ANDROID
 
@@ -277,7 +277,7 @@ if [ $BUILD_EM ]; then
     fi
     cd build-em
     rm -f CMakeCache.txt
-    emconfigure cmake .. -DCMAKE_BUILD_TYPE=${DEBUG+Debug}${DEBUG-Release} -DCMAKE_CXX_FLAGS="-s USE_LIBJPEG" -DCMAKE_C_FLAGS="-s USE_LIBJPEG" -DCMAKE_C_FLAGS_RELEASE="-DNDEBUG -O3" -DCMAKE_CXX_FLAGS_RELEASE="-DNDEBUG -O3"
+    emconfigure cmake .. -DCMAKE_BUILD_TYPE=${DEBUG+Debug}${DEBUG-Release} -DCMAKE_CXX_FLAGS="-s USE_LIBJPEG=1" -DCMAKE_C_FLAGS="-s USE_LIBJPEG=1" -DCMAKE_C_FLAGS_RELEASE="-DNDEBUG -O3" -DCMAKE_CXX_FLAGS_RELEASE="-DNDEBUG -O3"
     if [ "${DEBUG+Debug}${DEBUG-Release}" = "Debug" ]; then
         emmake make VERBOSE=1
     else
@@ -345,8 +345,8 @@ if [ $BUILD_LINUX ] ; then
                 fi
             fi
         fi
-    fi    
-    
+    fi
+
 
 	if [ ! -d "build-linux-x86_64" ] ; then
 		mkdir build-linux-x86_64

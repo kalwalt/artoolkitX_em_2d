@@ -30,14 +30,6 @@ set(PUBLIC_HEADERS
     include/ARX/ARVideo/videoRGBA.h
 )
 
-set(INCLUDE_DIRS
-    ${JPEG_INCLUDE_DIR}
-)
-
-set(LIBS
-    ${JPEG_LIBRARIES}
-)
-
 if (USE_CPARAM_SEARCH)
     find_package(CURL REQUIRED)
     if (NOT ARX_TARGET_PLATFORM_LINUX)

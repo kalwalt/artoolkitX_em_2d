@@ -24,7 +24,7 @@ set(MODULE_OPTIONS "-s MODULARIZE_INSTANCE=1 -s EXPORT_NAME='artoolkitXjs' -s EX
 
 math(EXPR MEM 256*1024*1024)
 message("CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
-set(MEMORY "-s TOTAL_MEMORY=${MEM}")
+set(MEMORY "-s TOTAL_MEMORY=${MEM}  -s ALLOW_MEMORY_GROWTH=1")
 
 #To generate source maps the -g4 needs to be passed to the LINK_FLAGS
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")

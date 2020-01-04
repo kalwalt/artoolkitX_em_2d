@@ -86,12 +86,10 @@ target_include_directories(KPM
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/FreakMatcher
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../ARUtil/include
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../AR/include
-    PRIVATE ${JPEG_INCLUDE_DIR}
 )
 
 target_link_libraries(KPM
     INTERFACE ${LIBS}
-    PRIVATE ${JPEG_LIBRARIES}
 )
 
 # Pass on headers to parent.
@@ -101,4 +99,3 @@ set(FRAMEWORK_HEADERS
    ${hprefixed}
    PARENT_SCOPE
 )
-
