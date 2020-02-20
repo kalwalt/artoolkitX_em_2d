@@ -272,7 +272,7 @@ if [ $BUILD_EM ]; then
     OPENCV_CONF="${OPENCV_MODULES_EXCLUDE} -DBUILD_opencv_apps=0 -DBUILD_JPEG=1 -DBUILD_PNG=1 -DBUILD_DOCS=0 -DBUILD_EXAMPLES=0 -DBUILD_IPP_IW=0 -DBUILD_PACKAGE=0 -DBUILD_PERF_TESTS=0 -DBUILD_TESTS=0 -DBUILD_WITH_DEBUG_INFO=0 -DWITH_PTHREADS_PF=0 -DWITH_PNG=1 -DWITH_WEBP=1 -DWITH_JPEG=1 -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=0 -DBUILD_ITT=0 -DWITH_IPP=0"
     echo "Building artoolkit for the web with Emscripten"
     echo "Building dependencies"
-    EM_ARTK_FLAGS="-msse -msse2 -msse3 -mssse3 -s USE_LIBJPEG=1 -I$OURDIR/depends/emscripten/opencv-3.4.1 -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/core/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/highgui/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/imgcodecs/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/videoio/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/imgproc/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/calib3d/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/features2d/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/flann/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/video/include -I$OURDIR/ARX/OCVT/include"
+    EM_ARTK_FLAGS="-msse -msse2 -msse3 -mssse3 -I$OURDIR/depends/emscripten/opencv-3.4.1 -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/core/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/highgui/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/imgcodecs/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/videoio/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/imgproc/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/calib3d/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/features2d/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/flann/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/video/include -I$OURDIR/ARX/OCVT/include"
     cd $OURDIR
     cd depends/emscripten/
     if [ ! -d "build_opencv-em" ] ; then
@@ -290,7 +290,7 @@ if [ $BUILD_EM ]; then
     cd build-em
     rm -f CMakeCache.txt
     rm -rf ./artoolkitx.js
-    emconfigure cmake .. -DCMAKE_BUILD_TYPE=${DEBUG+Debug}${DEBUG-Release} -DCMAKE_CXX_FLAGS="$EM_FLAGS $EM_ARTK_FLAGS" -DCMAKE_C_FLAGS="$EM_FLAGS $EM_ARTK_FLAGS" -DCMAKE_C_FLAGS_RELEASE="-DNDEBUG -O3" -DCMAKE_CXX_FLAGS_RELEASE="-DNDEBUG -O3" -DCMAKE_EXE_LINKER_FLAGS_RELEASE="-O3"
+    emconfigure cmake .. -DCMAKE_BUILD_TYPE=${DEBUG+Debug}${DEBUG-Release} -DCMAKE_CXX_FLAGS=" -s USE_LIBJPEG=1 $EM_FLAGS $EM_ARTK_FLAGS" -DCMAKE_C_FLAGS=" -s USE_LIBJPEG=1 $EM_FLAGS $EM_ARTK_FLAGS" -DCMAKE_C_FLAGS_RELEASE="-DNDEBUG -O3" -DCMAKE_CXX_FLAGS_RELEASE="-DNDEBUG -O3" -DCMAKE_EXE_LINKER_FLAGS_RELEASE="-O3"
 
     if [ "${DEBUG+Debug}${DEBUG-Release}" = "Debug" ]; then
         emmake make VERBOSE=1
