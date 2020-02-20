@@ -18,7 +18,8 @@ add_executable(artoolkitx ${PROJECT_SOURCE_DIR}/artoolkitx.js/ARX_js.cpp ${PROJE
 
 set(EXPORT_FUNCTIONS "'_arwUpdateAR', '_arwCapture', '_arwGetProjectionMatrix', '_arwQueryTrackableVisibilityAndTransformation', '_arwGetTrackablePatternConfig', '_arwGetTrackablePatternImage', '_arwLoadOpticalParams'")
 set(EXPORTED_RUNTIME_FUNCTIONS "'ccall', 'cwrap', 'FS', 'setValue'")
-set(MODULE_OPTIONS "-s MODULARIZE_INSTANCE=1 -s EXPORT_NAME='artoolkitXjs' -s EXPORT_ES6=1" )
+set(MODULE_OPTIONS "-s MODULARIZE_INSTANCE=1 -s USE_ES6_IMPORT_META=0 -s EXPORT_NAME='artoolkitXjs' -s EXPORT_ES6=1" )
+set(WASM_FLAGS " -s BINARYEN_TRAP_MODE=clamp -s SINGLE_FILE=1 ")
 
 #math(EXPR MEM 512*1024*1024)
 set(MEM 16777216) #This is default value
@@ -39,14 +40,14 @@ else()
 endif()
 
 # set(OPTIMIZE_OPTIONS "-s NO_EXIT_RUNTIME=1 -s INVOKE_RUN=0")
-set_target_properties(artoolkitx PROPERTIES LINK_FLAGS "${OPTIMIZE_OPTIONS} ${MODULE_OPTIONS} ${NO_WASM} ${WASM_LOADER} ${MEMORY} ${DEBUG_EMCC} ${OPTIMIZE_EMCC} --bind --post-js ${PROJECT_SOURCE_DIR}/artoolkitx.js/ARX_additions.js -s EXPORTED_FUNCTIONS='[${EXPORT_FUNCTIONS}]' -s EXTRA_EXPORTED_RUNTIME_METHODS='[${EXPORTED_RUNTIME_FUNCTIONS}]'")
+set_target_properties(artoolkitx PROPERTIES LINK_FLAGS "${OPTIMIZE_OPTIONS} ${MODULE_OPTIONS} ${WASM_FLAGS} ${NO_WASM} ${WASM_LOADER} ${MEMORY} ${DEBUG_EMCC} ${OPTIMIZE_EMCC} --bind --post-js ${PROJECT_SOURCE_DIR}/artoolkitx.js/ARX_additions.js -s EXPORTED_FUNCTIONS='[${EXPORT_FUNCTIONS}]' -s EXTRA_EXPORTED_RUNTIME_METHODS='[${EXPORTED_RUNTIME_FUNCTIONS}]'")
 
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/artoolkitx.js
     DESTINATION ${PROJECT_SOURCE_DIR}/../SDK/lib
 )
 else()
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/artoolkitx.js ${CMAKE_CURRENT_BINARY_DIR}/artoolkitx.wasm
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/artoolkitx.js
     DESTINATION ${PROJECT_SOURCE_DIR}/../SDK/lib
 )
 endif()
