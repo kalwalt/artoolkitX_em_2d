@@ -33,7 +33,7 @@ set(PRIVATE_HEADERS
 )
 
 set(SOURCE
-    OCVConfig.cpp 
+    OCVConfig.cpp
     HarrisDetector.cpp
     OCVFeatureDetector.cpp
     PlanarTracker.cpp
@@ -51,7 +51,6 @@ target_include_directories(OCVT
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../ARUtil/include
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../AR/include
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/ARX/OCVT
-    PRIVATE ${JPEG_INCLUDE_DIR}
     PRIVATE ${OpenCV_INCLUDE_DIR}
 )
 
@@ -59,17 +58,16 @@ target_include_directories(OCVT
 if(NOT ARX_TARGET_PLATFORM_WINDOWS)
 	target_link_libraries(OCVT
 		INTERFACE ${LIBS}
-		PRIVATE ${JPEG_LIBRARIES}
 		PRIVATE ${OpenCV_LIBS}
 	)
 else()
 	set (LINK_LIST "")
-	
+
 	foreach(x ${OpenCV_LIBS})
 		string(REPLACE ".lib" "341d.lib" x_debug ${x})
 		list (APPEND LINK_LIST debug ${x_debug} optimized ${x})
 	endforeach()
-	
+
 	target_link_libraries(OCVT
 		INTERFACE ${LIBS}
 	    ${LINK_LIST}
@@ -83,4 +81,3 @@ set(FRAMEWORK_HEADERS
    ${hprefixed}
    PARENT_SCOPE
 )
-

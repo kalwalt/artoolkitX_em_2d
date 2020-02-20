@@ -150,7 +150,7 @@ fi
 # iOS
 if [ $BUILD_IOS ] ; then
 
-    
+
     if [ ! -d "depends/ios/Frameworks/opencv2.framework" ] ; then
         curl "https://phoenixnap.dl.sourceforge.net/project/opencvlibrary/opencv-ios/3.4.1/opencv-3.4.1-ios-framework.zip" -o opencv2.zip
         unzip opencv2.zip -d depends/ios/Frameworks
@@ -233,7 +233,7 @@ else
         cd $OURDIR
         cp -v "../Examples/Square tracking example/Android/ARSquareTracking/ARSquareTrackingExample/build/outputs/apk/release/"ARSquareTrackingExample-release-unsigned.apk ../Examples/
         cp -v "../Examples/Square tracking example with OSG/Android/ARSquareTracking/ARSquareTrackingExample/build/outputs/apk/release/"ARSquareTrackingExample-release-unsigned.apk ../Examples/ARSquareTrackingExampleOSG-release-unsigned.apk
-        
+
         echo "Building example AR2dTracking as APK"
         cd $OURDIR
         cd "../Examples/2d tracking example/Android/AR2DTracking_Proj"; ./gradlew -q assembleRelease;
@@ -242,7 +242,7 @@ else
 
     fi
 fi
-    
+
 fi
 # /BUILD_ANDROID
 
@@ -272,7 +272,7 @@ if [ $BUILD_EM ]; then
     OPENCV_CONF="${OPENCV_MODULES_EXCLUDE} -DBUILD_opencv_apps=0 -DBUILD_JPEG=1 -DBUILD_PNG=1 -DBUILD_DOCS=0 -DBUILD_EXAMPLES=0 -DBUILD_IPP_IW=0 -DBUILD_PACKAGE=0 -DBUILD_PERF_TESTS=0 -DBUILD_TESTS=0 -DBUILD_WITH_DEBUG_INFO=0 -DWITH_PTHREADS_PF=0 -DWITH_PNG=1 -DWITH_WEBP=1 -DWITH_JPEG=1 -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=0 -DBUILD_ITT=0 -DWITH_IPP=0"
     echo "Building artoolkit for the web with Emscripten"
     echo "Building dependencies"
-    EM_ARTK_FLAGS="-msse -msse2 -msse3 -mssse3 -I$OURDIR/depends/emscripten/opencv-3.4.1 -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/core/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/highgui/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/imgcodecs/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/videoio/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/imgproc/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/calib3d/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/features2d/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/flann/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/video/include -I$OURDIR/ARX/OCVT/include"
+    EM_ARTK_FLAGS="-msse -msse2 -msse3 -mssse3 -s USE_LIBJPEG=1 -I$OURDIR/depends/emscripten/opencv-3.4.1 -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/core/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/highgui/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/imgcodecs/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/videoio/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/imgproc/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/calib3d/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/features2d/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/flann/include -I$OURDIR/depends/emscripten/opencv-3.4.1/modules/video/include -I$OURDIR/ARX/OCVT/include"
     cd $OURDIR
     cd depends/emscripten/
     if [ ! -d "build_opencv-em" ] ; then
@@ -280,7 +280,7 @@ if [ $BUILD_EM ]; then
     fi
     cd build_opencv-em
     cmake ../opencv-3.4.1 -GNinja -DCMAKE_TOOLCHAIN_FILE=$EM_TOOLCHAIN $OPENCV_CONF $OPENCV_INTRINSICS -DCMAKE_CXX_FLAGS="$EM_FLAGS" -DCMAKE_C_FLAGS="$EM_FLAGS" -DCMAKE_C_FLAGS_RELEASE="-DNDEBUG -O3" -DCMAKE_CXX_FLAGS_RELEASE="-DNDEBUG -O3"
-    # -DBUILD_PERF_TESTS:BOOL="0" -DWITH_IPP:BOOL="0" -DBUILD_SHARED_LIBS:BOOL="0" -DBUILD_IPP_IW:BOOL="0" -DBUILD_ITT:BOOL="0" -DBUILD_opencv_apps:BOOL="0" -DCMAKE_CXX_FLAGS:STRING="-O3 --llvm-lto 1 --bind -s ASSERTIONS=0 --memory-init-file 0 -s INVOKE_RUN=0 -s SIMD=1 -s WASM=0" -DCV_ENABLE_INTRINSICS:BOOL="1" -DWITH_ITT:BOOL="0" -DBUILD_TESTS:BOOL="0" 
+    # -DBUILD_PERF_TESTS:BOOL="0" -DWITH_IPP:BOOL="0" -DBUILD_SHARED_LIBS:BOOL="0" -DBUILD_IPP_IW:BOOL="0" -DBUILD_ITT:BOOL="0" -DBUILD_opencv_apps:BOOL="0" -DCMAKE_CXX_FLAGS:STRING="-O3 --llvm-lto 1 --bind -s ASSERTIONS=0 --memory-init-file 0 -s INVOKE_RUN=0 -s SIMD=1 -s WASM=0" -DCV_ENABLE_INTRINSICS:BOOL="1" -DWITH_ITT:BOOL="0" -DBUILD_TESTS:BOOL="0"
     ninja -v
     cd $OURDIR
     echo "Building artoolkit"
@@ -358,8 +358,8 @@ if [ $BUILD_LINUX ] ; then
                 fi
             fi
         fi
-    fi    
-    
+    fi
+
 
 	if [ ! -d "build-linux-x86_64" ] ; then
 		mkdir build-linux-x86_64

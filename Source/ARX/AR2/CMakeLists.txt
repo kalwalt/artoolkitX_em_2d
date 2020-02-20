@@ -70,12 +70,10 @@ target_include_directories(AR2
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../AR/include
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../ARUtil/include
-    PRIVATE ${JPEG_INCLUDE_DIR}
 )
 
 target_link_libraries(AR2
     INTERFACE ${LIBS}
-    PRIVATE ${JPEG_LIBRARIES}
 )
 
 # Pass on headers to parent.
@@ -85,4 +83,3 @@ set(FRAMEWORK_HEADERS
    ${hprefixed}
    PARENT_SCOPE
 )
-

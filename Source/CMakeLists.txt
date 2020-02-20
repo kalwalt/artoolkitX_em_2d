@@ -67,10 +67,10 @@ if(ARX_TARGET_PLATFORM_VARIANT)
 else()
     if (ARX_TARGET_PLATFORM_EMSCRIPTEN)
         # add_definitions("-msse -msse2 -msse3 -mssse3 -s USE_LIBJPEG -I${PROJECT_SOURCE_DIR}/depends/emscripten/opencv-3.4.1 -I${PROJECT_SOURCE_DIR}/depends/emscripten/opencv-3.4.1/modules/core/include -I${PROJECT_SOURCE_DIR}/depends/emscripten/opencv-3.4.1/modules/highgui/include -I${PROJECT_SOURCE_DIR}/depends/emscripten/opencv-3.4.1/modules/imgcodecs/include -I${PROJECT_SOURCE_DIR}/depends/emscripten/opencv-3.4.1/modules/videoio/include -I${PROJECT_SOURCE_DIR}/depends/emscripten/opencv-3.4.1/modules/imgproc/include -I${PROJECT_SOURCE_DIR}/depends/emscripten/opencv-3.4.1/modules/calib3d/include -I${PROJECT_SOURCE_DIR}/depends/emscripten/opencv-3.4.1/modules/features2d/include -I${PROJECT_SOURCE_DIR}/depends/emscripten/opencv-3.4.1/modules/flann/include -I${PROJECT_SOURCE_DIR}/depends/emscripten/opencv-3.4.1/modules/video/include -I${PROJECT_SOURCE_DIR}/ARX/OCVT/include")
-        set(JPEG_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/depends/emscripten/libjpeg/includes)
-      
-        set(JPEG_LIBRARIES ${PROJECT_SOURCE_DIR}/depends/emscripten/libjpeg/)
-        message("JPEG_INCLUDE_DIR ${JPEG_LIBRARIES}")
+        #set(JPEG_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/depends/emscripten/libjpeg/includes)
+
+        #set(JPEG_LIBRARIES ${PROJECT_SOURCE_DIR}/depends/emscripten/libjpeg/)
+        #message("JPEG_INCLUDE_DIR ${JPEG_LIBRARIES}")
         set(HAVE_INTEL_SIMD 0)
         if(CMAKE_HOST_SYSTEM_NAME MATCHES "Darwin")
             set(ARX_PLATFORM_NAME_FILESYSTEM "macos")
@@ -93,7 +93,7 @@ endif()
 add_definitions("-DARX_TARGET_PLATFORM_${ARX_PLATFORM_NAME_UC}=1")
 if(CMAKE_CONFIGURATION_TYPES)
   # Definitions for multi-configuration generator, e.g. Xcode, Visual Studio.
-  set_property(DIRECTORY APPEND PROPERTY 
+  set_property(DIRECTORY APPEND PROPERTY
     COMPILE_DEFINITIONS $<$<CONFIG:Debug>:DEBUG=1>
   )
 else()
@@ -214,7 +214,7 @@ elseif(ARX_TARGET_PLATFORM_LINUX)
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -march=core2 -fPIC -Wl,-rpath-link,${PROJECT_SOURCE_DIR}/depends/${ARX_PLATFORM_NAME_FILESYSTEM}/lib")
         set(HAVE_INTEL_SIMD 1)
     endif()
-    
+
     set(VENDOR_DIR ${CMAKE_SOURCE_DIR}/vendor)
 
 elseif(ARX_TARGET_PLATFORM_WINDOWS)
@@ -241,4 +241,3 @@ else()
     add_subdirectory(depends)
     add_subdirectory(Utilities)
 endif()
-
