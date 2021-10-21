@@ -41,6 +41,7 @@
 #include <ARX/ARTrackerSquare.h>
 #include <ARX/ARTrackableSquare.h>
 #include <ARX/ARTrackableMultiSquare.h>
+#include <ARX/ARTrackableMultiSquareAuto.h>
 #include <ARX/AR/ar.h>
 
 ARTrackerSquare::ARTrackerSquare() :
@@ -145,9 +146,9 @@ int ARTrackerSquare::threshold() const
     return m_threshold;
 }
 
-void ARTrackerSquare::setThresholdMode(int mode)
+void ARTrackerSquare::setThresholdMode(AR_LABELING_THRESH_MODE mode)
 {
-    m_thresholdMode = (AR_LABELING_THRESH_MODE)mode;
+    m_thresholdMode = mode;
     if (m_arHandle0) {
         arSetLabelingThreshMode(m_arHandle0, m_thresholdMode);
         ARLOGi("Threshold mode set to %d\n", (int)m_thresholdMode);
@@ -158,9 +159,9 @@ void ARTrackerSquare::setThresholdMode(int mode)
     }
 }
 
-int ARTrackerSquare::thresholdMode() const
+AR_LABELING_THRESH_MODE ARTrackerSquare::thresholdMode() const
 {
-    return (int)m_thresholdMode;
+    return m_thresholdMode;
 }
 
 void ARTrackerSquare::setLabelingMode(int mode)
@@ -218,22 +219,22 @@ float ARTrackerSquare::pattRatio() const
     return (float)m_pattRatio;
 }
 
-void ARTrackerSquare::setMatrixCodeType(int type)
+void ARTrackerSquare::setMatrixCodeType(AR_MATRIX_CODE_TYPE type)
 {
-    m_matrixCodeType = (AR_MATRIX_CODE_TYPE)type;
+    m_matrixCodeType = type;
     if (m_arHandle0) {
         arSetMatrixCodeType(m_arHandle0, m_matrixCodeType);
-        ARLOGi("Matrix code type set to %d.\n", m_matrixCodeType);
+        ARLOGi("Matrix code type set to %d.\n", (int)m_matrixCodeType);
     }
     if (m_arHandle1) {
         arSetMatrixCodeType(m_arHandle1, m_matrixCodeType);
-        ARLOGi("Matrix code type set to %d.\n", m_matrixCodeType);
+        ARLOGi("Matrix code type set to %d.\n", (int)m_matrixCodeType);
     }
 }
 
-int ARTrackerSquare::matrixCodeType() const
+AR_MATRIX_CODE_TYPE ARTrackerSquare::matrixCodeType() const
 {
-    return (int)m_matrixCodeType;
+    return m_matrixCodeType;
 }
 
 void ARTrackerSquare::setPatternSize(int patternSize)
@@ -398,6 +399,8 @@ bool ARTrackerSquare::update(AR2VideoBufferT *buff0, AR2VideoBufferT *buff1, std
                 success &= ((ARTrackableSquare *)(*it))->updateWithDetectedMarkers(markerInfo0, markerNum0, m_ar3DHandle);
             } else if ((*it)->type == ARTrackable::MULTI) {
                 success &= ((ARTrackableMultiSquare *)(*it))->updateWithDetectedMarkers(markerInfo0, markerNum0, m_ar3DHandle);
+            } else if ((*it)->type == ARTrackable::MULTI_AUTO) {
+                success &= ((ARTrackableMultiSquareAuto *)(*it))->updateWithDetectedMarkers(markerInfo0, markerNum0, m_arHandle0->xsize, m_arHandle0->ysize, m_ar3DHandle);
             }
         }
     } else {
@@ -406,6 +409,8 @@ bool ARTrackerSquare::update(AR2VideoBufferT *buff0, AR2VideoBufferT *buff1, std
                 success &= ((ARTrackableSquare *)(*it))->updateWithDetectedMarkersStereo(markerInfo0, markerNum0, markerInfo1, markerNum1, m_ar3DStereoHandle, m_transL2R);
             } else if ((*it)->type == ARTrackable::MULTI) {
                 success &= ((ARTrackableMultiSquare *)(*it))->updateWithDetectedMarkersStereo(markerInfo0, markerNum0, markerInfo1, markerNum1, m_ar3DStereoHandle, m_transL2R);
+            } else if ((*it)->type == ARTrackable::MULTI_AUTO) {
+                success &= ((ARTrackableMultiSquareAuto *)(*it))->updateWithDetectedMarkersStereo(markerInfo0, markerNum0, m_arHandle0->xsize, m_arHandle0->ysize, markerInfo1, markerNum1, m_arHandle1->xsize, m_arHandle1->ysize, m_ar3DStereoHandle, m_transL2R);
             }
         }
     }
@@ -571,6 +576,42 @@ ARTrackable *ARTrackerSquare::newTrackable(std::vector<std::string> config)
         }
         return ret;
         
+    } else if (config.at(0).compare("multi_auto") == 0) {
+        
+        // Token 2 is origin marker barcode ID.
+        if (config.size() < 2) {
+            ARLOGe("Multimarker auto config. requires base marker ID.\n");
+            return nullptr;
+        }
+        long originMarkerUID = strtol(config.at(1).c_str(), NULL, 0);
+        if (originMarkerUID < 0 || (originMarkerUID == 0 && (errno == EINVAL || errno == ERANGE))) {
+            ARLOGe("Multimarker auto config. specified with invalid origin marker UID parameter ('%s').\n", config.at(1).c_str());
+            return nullptr;
+        }
+
+        // Token 3 is marker width.
+        if (config.size() < 3) {
+            ARLOGe("Multimarker auto config. requires marker width.\n");
+            return nullptr;
+        }
+        ARdouble width;
+#ifdef ARDOUBLE_IS_FLOAT
+        width = strtof(config.at(2).c_str(), NULL);
+#else
+        width = strtod(config.at(2).c_str(), NULL);
+#endif
+        if (width == 0.0f) {
+            ARLOGe("Multimarker auto config. specified with invalid width parameter ('%s').\n", config.at(2).c_str());
+            return nullptr;
+        }
+        
+        ARTrackableMultiSquareAuto *ret = new ARTrackableMultiSquareAuto();
+        if (!ret->initWithOriginMarkerUID(originMarkerUID, width)) {
+            // Marker failed to load, or was not added
+            delete ret;
+            ret = NULL;
+        }
+        return ret;
     } else {
         return nullptr;
     }
@@ -580,7 +621,7 @@ ARTrackable *ARTrackerSquare::newTrackable(std::vector<std::string> config)
 void ARTrackerSquare::deleteTrackable(ARTrackable **trackable_p)
 {
     if (!trackable_p || !(*trackable_p)) return;
-    if ((*trackable_p)->type != ARTrackable::SINGLE && (*trackable_p)->type != ARTrackable::MULTI) return;
+    if ((*trackable_p)->type != ARTrackable::SINGLE && (*trackable_p)->type != ARTrackable::MULTI && (*trackable_p)->type != ARTrackable::MULTI_AUTO) return;
     
     delete (*trackable_p);
     (*trackable_p) = NULL;

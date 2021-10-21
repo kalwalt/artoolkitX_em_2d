@@ -21,14 +21,13 @@ EMSCRIPTEN_BINDINGS(constant_bindings) {
     function("arwStartRunningJS", &arwStartRunningJS);
     function("pushVideoInit", &pushVideoInit);
     function("getError", &arwGetError);
-    
+
     function("isRunning", &arwIsRunning);
     function("isInitialized", &arwIsInited);
     function("stopRunning", &arwStopRunning);
     function("shutdownAR", &arwShutdownAR);
 
     /*** Video stream management ***/
-    //* ATTENTION: arwGetProjectionMatrix is exported from ARX_additions.js
 
     value_object<VideoParams>("VideoParams")
         .field("width", &VideoParams::width)

@@ -1,6 +1,33 @@
 # artoolkitX Release Notes
 --------------------------
 
+## Version 1.0.5.1
+### 2018-10-15
+
+This release changes only the Android SDK. The Android build now builds against SDK 28 (with build tools v28.0.3).
+
+## Version 1.0.5
+### 2018-10-08
+
+This release corrects a build problem with iOS and macOS caused by conflicting libjpeg versions between artoolkitX and OpenCV. As of this release, artoolkitX for macOS and iOS uses libjpeg-turbo and a prerelease version of OpenCV 4.0.0. There are some other minor changes allowing setting of some square tracking and thresholding options.
+
+## Version 1.0.4
+### 2018-10-05
+
+This is a minor release which adds the option to set a minimum inlier probability when using robust multi-marker square tracking.
+
+## Version 1.0.3
+### 2018-09-25
+
+This release adds new capabilities and addresses a number issues.
+ * If OpenCV is available, subpixel refinement of square marker corners is now available (not enabled by default).
+ * A significant bug affecting 2D texture tracking has been corrected.
+ * A new ARTrackable subclass is available which automatically builds a map of 2D barcode markers. Optionally, if the GTSAM toolkit is available, it will be used to refine the map.
+ * On Linux, if OpenCV 3.x is available in the system, it will be used in preference to the supplied OpenCV build.
+ * For Android, gradle has been updated to 4.4.
+ * For Windows, build script has been improved.
+ * Other minor bug fixes.
+
 ## Version 1.0.2
 ### 2018-07-11
 

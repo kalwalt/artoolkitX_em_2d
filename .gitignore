@@ -70,10 +70,6 @@ Source/depends/emscripten/opencv-em
 Source/depends/emscripten/build_opencv-em
 Source/depends/emscripten/opencv-3.4.1/auto-build
 Source/depends/emscripten/opencv-3.4.1/build_Ninja
-Source/depends/emscripten/opencv-3.4.1/build_Ninja_opt
-Source/depends/emscripten/opencv-3.4.1/build_test
-Source/depends/emscripten/opencv-3.4.1/ninja_2
-Source/depends/emscripten/opencv-3.4.1/samples
 Source/depends/emscripten/opencv-3.4.1/ninja_2
 Source/depends/emscripten/opencv-3.4.1/samples
 Source/depends/emscripten/build_opencv-em.1

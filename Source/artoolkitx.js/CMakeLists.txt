@@ -12,9 +12,10 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR}/../ARX/AR/include)
 add_definitions("-std=c++11")
 set(OPENCV_EM "../../depends/emscripten/build_opencv-em")
 
-link_directories(${CMAKE_CURRENT_BINARY_DIR}/../ARX ${CMAKE_CURRENT_BINARY_DIR}/../ARX/AR ${CMAKE_CURRENT_BINARY_DIR}/../ARX/ARUtil ${CMAKE_CURRENT_BINARY_DIR}/../ARX/AR2 ${CMAKE_CURRENT_BINARY_DIR}/../ARX/KPM ${CMAKE_CURRENT_BINARY_DIR}/../ARX/ARVideo ${CMAKE_CURRENT_BINARY_DIR}/../ARX/ARG ${CMAKE_CURRENT_BINARY_DIR}/../ARX/OCVT ${CMAKE_CURRENT_BINARY_DIR}/${OPENCV_EM}/lib ${CMAKE_CURRENT_BINARY_DIR}/${OPENCV_EM}/3rdparty/lib)
-link_libraries(libARX libARVideo libAR libARG libARUtil libOCVT libopencv_highgui libopencv_imgcodecs libopencv_videoio libopencv_calib3d libopencv_features2d libopencv_flann libopencv_imgproc libopencv_video libopencv_core libpng libjpeg libwebp libprotobuf IlmImf zlib)
-add_executable(artoolkitx ${PROJECT_SOURCE_DIR}/artoolkitx.js/ARX_js.cpp ${PROJECT_SOURCE_DIR}/artoolkitx.js/ARX_bindings.cpp)
+link_directories(${CMAKE_CURRENT_BINARY_DIR}/../ARX ${CMAKE_CURRENT_BINARY_DIR}/../ARX/AR ${CMAKE_CURRENT_BINARY_DIR}/../ARX/ARUtil ${CMAKE_CURRENT_BINARY_DIR}/../ARX/AR2 ${CMAKE_CURRENT_BINARY_DIR}/../ARX/KPM ${CMAKE_CURRENT_BINARY_DIR}/../ARX/ARVideo ${CMAKE_CURRENT_BINARY_DIR}/../ARX/ARG)
+link_libraries(libARX libARVideo libAR libAR2 libARG libARUtil libKPM)
+
+add_executable(artoolkitx  ${PROJECT_SOURCE_DIR}/artoolkitx.js/ARX_js.cpp ${PROJECT_SOURCE_DIR}/artoolkitx.js/ARX_bindings.cpp)
 
 set(EXPORT_FUNCTIONS "'_arwUpdateAR', '_arwCapture', '_arwGetProjectionMatrix', '_arwQueryTrackableVisibilityAndTransformation', '_arwGetTrackablePatternConfig', '_arwGetTrackablePatternImage', '_arwLoadOpticalParams'")
 set(EXPORTED_RUNTIME_FUNCTIONS "'ccall', 'cwrap', 'FS', 'setValue'")
@@ -26,7 +27,7 @@ set(ES6_FLAGS = " -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0 -s MODULARIZE=1 ")
 #math(EXPR MEM 512*1024*1024)
 set(MEM 16777216) #This is default value
 message("CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
-set(MEMORY "-s TOTAL_MEMORY=${MEM} -s ALLOW_MEMORY_GROWTH=1")
+set(MEMORY "-s TOTAL_MEMORY=${MEM} ")
 
 set(WASM_LOADER "--pre-js ${PROJECT_SOURCE_DIR}/artoolkitx.js/ARX_wasmLoader.js")
 #To generate source maps the -g4 needs to be passed to the LINK_FLAGS

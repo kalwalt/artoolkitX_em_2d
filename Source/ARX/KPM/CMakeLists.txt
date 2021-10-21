@@ -1,19 +1,3 @@
-if(NOT ARX_TARGET_PLATFORM_WINDOWS)
-	find_package(JPEG REQUIRED)
-else()
-	find_path(JPEG_INCLUDE_DIR
-		NAMES jconfig.h jmorecfg.h jpeglib.h jversion.h
-		PATHS ${PROJECT_SOURCE_DIR}/depends/windows/include
-		DOC "The directory where jpeg headers resides"
-	)
-
-	find_library(JPEG_LIBRARIES
-		NAMES libjpeg
-		PATHS ${PROJECT_SOURCE_DIR}/depends/windows/lib/x64
-		DOC "The directory where jpeg static library resides"
-	)
-endif()
-
 set(PUBLIC_HEADERS
     include/ARX/KPM/kpm.h
     include/ARX/KPM/kpmType.h
@@ -102,12 +86,10 @@ target_include_directories(KPM
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/FreakMatcher
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../ARUtil/include
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../AR/include
-    PRIVATE ${JPEG_INCLUDE_DIR}
 )
 
 target_link_libraries(KPM
     INTERFACE ${LIBS}
-    PRIVATE ${JPEG_LIBRARIES}
 )
 
 # Pass on headers to parent.
@@ -117,4 +99,3 @@ set(FRAMEWORK_HEADERS
    ${hprefixed}
    PARENT_SCOPE
 )
-
