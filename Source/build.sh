@@ -150,7 +150,7 @@ fi
 # iOS
 if [ $BUILD_IOS ] ; then
 
-    
+
     if [ ! -d "depends/ios/Frameworks/opencv2.framework" ] ; then
         curl "https://phoenixnap.dl.sourceforge.net/project/opencvlibrary/opencv-ios/3.4.1/opencv-3.4.1-ios-framework.zip" -o opencv2.zip
         unzip opencv2.zip -d depends/ios/Frameworks
@@ -233,7 +233,7 @@ else
         cd $OURDIR
         cp -v "../Examples/Square tracking example/Android/ARSquareTracking/ARSquareTrackingExample/build/outputs/apk/release/"ARSquareTrackingExample-release-unsigned.apk ../Examples/
         cp -v "../Examples/Square tracking example with OSG/Android/ARSquareTracking/ARSquareTrackingExample/build/outputs/apk/release/"ARSquareTrackingExample-release-unsigned.apk ../Examples/ARSquareTrackingExampleOSG-release-unsigned.apk
-        
+
         echo "Building example AR2dTracking as APK"
         cd $OURDIR
         cd "../Examples/2d tracking example/Android/AR2DTracking_Proj"; ./gradlew -q assembleRelease;
@@ -242,7 +242,7 @@ else
 
     fi
 fi
-    
+
 fi
 # /BUILD_ANDROID
 
@@ -280,7 +280,7 @@ if [ $BUILD_EM ]; then
     fi
     cd build_opencv-em
     cmake ../opencv-3.4.1 -GNinja -DCMAKE_TOOLCHAIN_FILE=$EM_TOOLCHAIN $OPENCV_CONF $OPENCV_INTRINSICS -DCMAKE_CXX_FLAGS="$EM_FLAGS" -DCMAKE_C_FLAGS="$EM_FLAGS" -DCMAKE_C_FLAGS_RELEASE="-DNDEBUG -O3" -DCMAKE_CXX_FLAGS_RELEASE="-DNDEBUG -O3"
-    # -DBUILD_PERF_TESTS:BOOL="0" -DWITH_IPP:BOOL="0" -DBUILD_SHARED_LIBS:BOOL="0" -DBUILD_IPP_IW:BOOL="0" -DBUILD_ITT:BOOL="0" -DBUILD_opencv_apps:BOOL="0" -DCMAKE_CXX_FLAGS:STRING="-O3 --llvm-lto 1 --bind -s ASSERTIONS=0 --memory-init-file 0 -s INVOKE_RUN=0 -s SIMD=1 -s WASM=0" -DCV_ENABLE_INTRINSICS:BOOL="1" -DWITH_ITT:BOOL="0" -DBUILD_TESTS:BOOL="0" 
+    # -DBUILD_PERF_TESTS:BOOL="0" -DWITH_IPP:BOOL="0" -DBUILD_SHARED_LIBS:BOOL="0" -DBUILD_IPP_IW:BOOL="0" -DBUILD_ITT:BOOL="0" -DBUILD_opencv_apps:BOOL="0" -DCMAKE_CXX_FLAGS:STRING="-O3 --llvm-lto 1 --bind -s ASSERTIONS=0 --memory-init-file 0 -s INVOKE_RUN=0 -s SIMD=1 -s WASM=0" -DCV_ENABLE_INTRINSICS:BOOL="1" -DWITH_ITT:BOOL="0" -DBUILD_TESTS:BOOL="0"
     ninja -v
     cd $OURDIR
     echo "Building artoolkit"
@@ -290,7 +290,7 @@ if [ $BUILD_EM ]; then
     cd build-em
     rm -f CMakeCache.txt
     rm -rf ./artoolkitx.js
-    emconfigure cmake .. -DCMAKE_BUILD_TYPE=${DEBUG+Debug}${DEBUG-Release} -DCMAKE_CXX_FLAGS="$EM_FLAGS $EM_ARTK_FLAGS" -DCMAKE_C_FLAGS="$EM_FLAGS $EM_ARTK_FLAGS" -DCMAKE_C_FLAGS_RELEASE="-DNDEBUG -O3" -DCMAKE_CXX_FLAGS_RELEASE="-DNDEBUG -O3" -DCMAKE_EXE_LINKER_FLAGS_RELEASE="-O3"
+    emcmake cmake .. -DCMAKE_BUILD_TYPE=${DEBUG+Debug}${DEBUG-Release} -DCMAKE_CXX_FLAGS="$EM_FLAGS $EM_ARTK_FLAGS" -DCMAKE_C_FLAGS="$EM_FLAGS $EM_ARTK_FLAGS" -DCMAKE_C_FLAGS_RELEASE="-DNDEBUG -O3" -DCMAKE_CXX_FLAGS_RELEASE="-DNDEBUG -O3" -DCMAKE_EXE_LINKER_FLAGS_RELEASE="-O3"
 
     if [ "${DEBUG+Debug}${DEBUG-Release}" = "Debug" ]; then
         emmake make VERBOSE=1
@@ -358,8 +358,8 @@ if [ $BUILD_LINUX ] ; then
                 fi
             fi
         fi
-    fi    
-    
+    fi
+
 
 	if [ ! -d "build-linux-x86_64" ] ; then
 		mkdir build-linux-x86_64
