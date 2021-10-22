@@ -20,9 +20,9 @@ add_executable(artoolkitxES6  ${PROJECT_SOURCE_DIR}/artoolkitx.js/ARX_js.cpp ${P
 
 set(EXPORT_FUNCTIONS "'_arwUpdateAR', '_arwCapture', '_arwGetProjectionMatrix', '_arwQueryTrackableVisibilityAndTransformation', '_arwGetTrackablePatternConfig', '_arwGetTrackablePatternImage', '_arwLoadOpticalParams'")
 set(EXPORTED_RUNTIME_FUNCTIONS "'ccall', 'cwrap', 'FS', 'setValue'")
-set(MODULE_OPTIONS "-s MODULARIZE_INSTANCE=1 -s EXPORT_NAME='artoolkitXjs' -s EXPORT_ES6=1" )
+set(MODULE_OPTIONS "-s MODULARIZE_INSTANCE=1 -s EXPORT_NAME='artoolkitX' -s EXPORT_ES6=1" )
 set(WASM_FLAGS_SINGLE_FILE  " -s SINGLE_FILE=1 ")
-set(ES6_FLAGS  " -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0 -s EXPORT_NAME='artoolkitXjs' -s MODULARIZE=1 ")
+set(ES6_FLAGS  " -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0 -s EXPORT_NAME='artoolkitX' -s MODULARIZE=1 ")
 
 
 #math(EXPR MEM 512*1024*1024)
