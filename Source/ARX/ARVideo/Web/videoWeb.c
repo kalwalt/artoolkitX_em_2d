@@ -72,7 +72,7 @@ int ar2VideoDispOptionWeb(void)
     ARPRINT(" -height=N\n");
     ARPRINT("    specifies desired height of image.\n");
     ARPRINT("\n");
-    
+
     return 0;
 }
 
@@ -84,9 +84,9 @@ AR2VideoParamWebT *ar2VideoOpenAsyncWeb(const char *config, void (*callback)(voi
     int err_i = 0;
     int i;
     int width = 0, height = 0;
-    
+
     arMallocClear(vid, AR2VideoParamWebT, 1);
-    
+
     ARLOGi("ar2VideoOpenAsyncWeb '%s'.\n", config);
 
     a = config;
@@ -94,7 +94,7 @@ AR2VideoParamWebT *ar2VideoOpenAsyncWeb(const char *config, void (*callback)(voi
         for(;;) {
             while(*a == ' ' || *a == '\t') a++;
             if (*a == '\0') break;
-            
+
             if (sscanf(a, "%s", line) == 0) break;
             if (strcmp(line, "-module=Web") == 0) {
             } else if (strncmp(line, "-width=", 7) == 0) {
@@ -110,17 +110,17 @@ AR2VideoParamWebT *ar2VideoOpenAsyncWeb(const char *config, void (*callback)(voi
             } else {
                 err_i = 1;
             }
-            
+
             if (err_i) {
                 ARLOGe("Error: Unrecognised configuration option '%s'.\n", a);
                 ar2VideoDispOptionWeb();
                 goto bail;
             }
-            
+
             while (*a != ' ' && *a != '\t' && *a != '\0') a++;
         }
     }
-    
+
     // Initial state.
     vid->pixelFormat = AR_PIXEL_FORMAT_INVALID;
     if (!vid->focal_length) vid->focal_length = AR_VIDEO_WEB_FOCAL_LENGTH_DEFAULT;
@@ -142,7 +142,7 @@ done:
 int ar2VideoCloseWeb(AR2VideoParamWebT *vid)
 {
     if (!vid) return (-1); // Sanity check.
-    
+
     bool pushInited;
     pthread_mutex_lock(&(vid->frameLock));
     pushInited = vid->pushInited;
@@ -151,17 +151,17 @@ int ar2VideoCloseWeb(AR2VideoParamWebT *vid)
         ARLOGe("Error: cannot close video while frames are still being pushed.\n");
         return (-1);
     }
-    
+
     if (vid->capturing) ar2VideoCapStopWeb(vid);
-    
+
 	pthread_mutex_destroy(&(vid->frameLock));
-	pthread_cond_destroy(&(vid->frameInCond));     
+	pthread_cond_destroy(&(vid->frameInCond));
     free(vid->buffer.buff);
     free(vid->buffer.buffLuma);
     free(vid);
-    
+
     return 0;
-} 
+}
 
 int ar2VideoGetIdWeb(AR2VideoParamWebT *vid, ARUint32 *id0, ARUint32 *id1)
 {
@@ -171,10 +171,10 @@ int ar2VideoGetIdWeb(AR2VideoParamWebT *vid, ARUint32 *id0, ARUint32 *id1)
 int ar2VideoGetSizeWeb(AR2VideoParamWebT *vid, int *x, int *y)
 {
     if (!vid) return -1; // Sanity check.
-    
+
     if (x) *x = vid->widthIn;
     if (y) *y = vid->heightIn;
-    
+
     return 0;
 }
 
@@ -182,9 +182,9 @@ AR2VideoBufferT *ar2VideoGetImageWeb(AR2VideoParamWebT *vid)
 {
 
     AR2VideoBufferT *ret = NULL;
-    
+
     if (!vid) return NULL; // Sanity check.
-    pthread_mutex_lock(&(vid->frameLock));    
+    pthread_mutex_lock(&(vid->frameLock));
     if (!vid->pushInited) goto done; // ar2VideoPushInitWeb must have been called.
     if (vid->newFrame) {
         vid->newFrame = false;
@@ -192,16 +192,16 @@ AR2VideoBufferT *ar2VideoGetImageWeb(AR2VideoParamWebT *vid)
     }
 
 done:
-    pthread_mutex_unlock(&(vid->frameLock));    
-    return (ret);    
+    pthread_mutex_unlock(&(vid->frameLock));
+    return (ret);
 }
 
 int ar2VideoCapStartWeb(AR2VideoParamWebT *vid)
 {
     int ret = -1;
-    
+
     if (!vid) return -1; // Sanity check.
-    
+
     pthread_mutex_lock(&(vid->frameLock));
     if (vid->capturing) goto done; // Already capturing.
     vid->capturing = true;
@@ -223,7 +223,7 @@ int ar2VideoCapStopWeb(AR2VideoParamWebT *vid)
     if (!vid->capturing) goto done; // Not capturing.
     vid->capturing = false;
     vid->newFrame = false;
-    vid->pushInited = false;    
+    vid->pushInited = false;
     ret = 0;
 done:
     pthread_mutex_unlock(&(vid->frameLock));
@@ -240,23 +240,23 @@ int ar2VideoPushInitWeb(AR2VideoParamWebT *vid, int width, int height, const cha
 {
     int err;
     int ret = -1;
- 
+
     if (!vid || width <= 0 || height <= 0 || !pixelFormat) return (-1); // Sanity check.
-    
+
     pthread_mutex_lock(&(vid->frameLock));
-    
+
     if (vid->pushInited) {
         ARLOGe("ar2VideoPushInitWeb: Error: called while already inited.\n");
         goto done;
     }
-    
+
     if (strcmp(pixelFormat, "RGBA") == 0)  {
         vid->pixelFormat = AR_PIXEL_FORMAT_RGBA;
     } else {
         ARLOGe("ar2VideoPushInitWeb: Error: frames arriving in unsupported pixel format '%s'.\n", pixelFormat);
         goto done;
     }
-    
+
     int videoSize = width * height * 4 * sizeof(ARUint8);
     ARLOGd("videoSize = width %d * height %d * 4 * sizeof(ARUint8) %d= '%d'.\n", width, height, sizeof(ARUint8), videoSize);
 
@@ -277,10 +277,10 @@ int ar2VideoPushInitWeb(AR2VideoParamWebT *vid, int width, int height, const cha
     vid->pushInited = true;
 
     EM_ASM_({
-        if (!artoolkitXjs["videoMalloc"]) {
-            artoolkitXjs["videoMalloc"] = ({});
+        if (!artoolkitX["videoMalloc"]) {
+            artoolkitX["videoMalloc"] = ({});
         }
-        var videoMalloc = artoolkitXjs["videoMalloc"];
+        var videoMalloc = artoolkitX["videoMalloc"];
         videoMalloc["framepointer"] = $0;
         videoMalloc["framesize"] = $1;
         videoMalloc["lumaFramePointer"] = $2;
@@ -288,7 +288,7 @@ int ar2VideoPushInitWeb(AR2VideoParamWebT *vid, int width, int height, const cha
         videoMalloc["fillFlagIntPtr"] = $4;
         videoMalloc["timeSecPtr"] = $5;
         videoMalloc["timeMilliSecPtr"] = $6;
-    }, 
+    },
         vid->buffer.buff,
         videoSize,
         vid->buffer.buffLuma,
@@ -301,7 +301,7 @@ int ar2VideoPushInitWeb(AR2VideoParamWebT *vid, int width, int height, const cha
     ret = 0;
     (vid->callback)(vid->userdata);
 
-done: 
+done:
     pthread_mutex_unlock(&(vid->frameLock));
     if ((err = pthread_cond_signal(&(vid->frameInCond))) != 0) {
         ARLOGe("ar2VideoPushInitWeb(): pthread_cond_signal error %d.\n", err);
