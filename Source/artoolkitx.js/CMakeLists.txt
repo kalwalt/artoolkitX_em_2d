@@ -28,7 +28,7 @@ set(ES6_FLAGS  " -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0 -s EXPORT_NAME='artool
 #math(EXPR MEM 512*1024*1024)
 set(MEM 16777216) #This is default value
 message("CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
-set(MEMORY "-s TOTAL_MEMORY=${MEM} ")
+set(MEMORY "-s TOTAL_MEMORY=${MEM} -s ALLOW_MEMORY_GROWTH=1")
 
 set(WASM_LOADER "--pre-js ${PROJECT_SOURCE_DIR}/artoolkitx.js/ARX_wasmLoader.js")
 #To generate source maps the -g4 needs to be passed to the LINK_FLAGS
