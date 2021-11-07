@@ -1,21 +1,3 @@
-if(NOT ARX_TARGET_PLATFORM_WINDOWS)
-  if(NOT ARX_TARGET_PLATFORM_EMSCRIPTEN)
-    find_package(JPEG REQUIRED)
-  endif()
-else()
-	find_path(JPEG_INCLUDE_DIR
-		NAMES jconfig.h jmorecfg.h jpeglib.h jversion.h
-		PATHS ${PROJECT_SOURCE_DIR}/depends/windows/include
-		DOC "The directory where jpeg headers resides"
-	)
-
-	find_library(JPEG_LIBRARIES
-		NAMES libjpeg
-		PATHS ${PROJECT_SOURCE_DIR}/depends/windows/lib/x64
-		DOC "The directory where jpeg static library resides"
-	)
-endif()
-
 set(PUBLIC_HEADERS
     include/ARX/AR2/config.h
     include/ARX/AR2/coord.h
@@ -70,12 +52,10 @@ target_include_directories(AR2
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../AR/include
     PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../ARUtil/include
-    PRIVATE ${JPEG_INCLUDE_DIR}
 )
 
 target_link_libraries(AR2
     INTERFACE ${LIBS}
-    PRIVATE ${JPEG_LIBRARIES}
 )
 
 # Pass on headers to parent.
