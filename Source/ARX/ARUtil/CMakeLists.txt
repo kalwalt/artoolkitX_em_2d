@@ -11,7 +11,9 @@ if(NOT ARX_TARGET_PLATFORM_WINDOWS)
             STB_INCLUDE_DIR
             stb_image 
             NO_SYSTEM_ENVIRONMENT_PATH
-            PATHS ${CMAKE_FIND_ROOT_PATH}/include
+            #PATHS ${CMAKE_FIND_ROOT_PATH}/include
+            NAMES stb_image.h stb_image_write.h
+            PATHS ${PROJECT_SOURCE_DIR}/depends/windows/include
         )
         add_definitions("-s USE_ZLIB=1")
     endif()
