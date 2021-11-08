@@ -3,18 +3,26 @@ if(NOT ARX_TARGET_PLATFORM_WINDOWS)
         find_package(ZLIB REQUIRED)
         find_path(
             STB_INCLUDE_DIR
-            stb_image 
+            stb_image
             NO_SYSTEM_ENVIRONMENT_PATH
         )
     else()
+        if(CMAKE_HOST_SYSTEM_NAME MATCHES "Linux")
         find_path(
             STB_INCLUDE_DIR
-            stb_image 
-            NO_SYSTEM_ENVIRONMENT_PATH
-            #PATHS ${CMAKE_FIND_ROOT_PATH}/include
+            stb_image
             NAMES stb_image.h stb_image_write.h
-            PATHS ${PROJECT_SOURCE_DIR}/depends/windows/include
+            NO_SYSTEM_ENVIRONMENT_PATH
+            PATHS ${PROJECT_SOURCE_DIR}/depends/emscripten/include
         )
+        else()
+        find_path(
+            STB_INCLUDE_DIR
+            stb_image
+            NO_SYSTEM_ENVIRONMENT_PATH
+            PATHS ${CMAKE_FIND_ROOT_PATH}/include
+        )
+        endif()
         add_definitions("-s USE_ZLIB=1")
     endif()
 else()
@@ -96,7 +104,7 @@ endif()
 target_include_directories(ARUtil
     PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     PRIVATE ${STB_INCLUDE_DIR}
-    PRIVATE ${ZLIB_INCLUDE_DIRS} 
+    PRIVATE ${ZLIB_INCLUDE_DIRS}
     PRIVATE ${PTHREAD_INCLUDE_DIRS}
 )
 
